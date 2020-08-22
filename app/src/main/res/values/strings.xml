@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SmartSilent</string>
+    <string name="add_profile">Add new profile</string>
+    <string name="my_profiles">My profiles</string>
+</resources>
