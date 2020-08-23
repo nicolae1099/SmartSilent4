@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +28,10 @@ import java.util.List;
 public class MakeContacts extends AppCompatActivity {
     Button btnview, listview;
     TextView txtname,txtphno;
-    static final int PICK_CONTACT = 1;
-    String st;
+    private Context context;
+    private SQLiteDatabase database;
+
+    final private int PICK_CONTACT = 1;
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
     ArrayList<String> contacts_name = new ArrayList<>();
@@ -41,6 +47,8 @@ public class MakeContacts extends AppCompatActivity {
     txtname = (TextView) findViewById(R.id.txtname);
     txtphno = (TextView) findViewById(R.id.txtphno);
 
+    context = getApplicationContext();
+    database = new ContactsDatabaseHelper(context).getWritableDatabase();
 
     btnview.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -145,8 +153,11 @@ public class MakeContacts extends AppCompatActivity {
 
                             if (cNumber.compareTo("N/A") != 0) {
                                 System.out.println(cNumber);
-                                contacts_name.add(name);
-                                contacts_number.add(cNumber);
+                                //contacts_name.add(name);
+                                //contacts_number.add(cNumber);
+                                ContentValues values = getContentValues(name, cNumber);
+
+                                database.insert(ContactsDatabase.NAME, null, values);
                             }
                         }
                         catch (Exception ex)
@@ -158,4 +169,16 @@ public class MakeContacts extends AppCompatActivity {
                 break;
         }
     }
+
+    private static ContentValues getContentValues(String name, String cNumber) {
+        ContentValues values = new ContentValues();
+        values.put(ContactsDatabase.Cols.CONTACT_NAME, name);
+        values.put(ContactsDatabase.Cols.PHONE_NUMBER, cNumber);
+
+        return values;
+    }
+
+
+
+
 }
