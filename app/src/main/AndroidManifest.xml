@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" ></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
-    
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
@@ -29,6 +29,7 @@
         </activity>
 
         <activity android:name=".MakeContacts"></activity>
+        <activity android:name=".SelectedContacts"></activity>
 
     </application>
 

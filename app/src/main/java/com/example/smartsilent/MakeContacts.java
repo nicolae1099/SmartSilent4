@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,12 +22,14 @@ import java.util.List;
 
 
 public class MakeContacts extends AppCompatActivity {
-    Button btnview;
+    Button btnview, listview;
     TextView txtname,txtphno;
     static final int PICK_CONTACT = 1;
     String st;
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
+    ArrayList<String> contacts_name = new ArrayList<>();
+    ArrayList<String> contacts_number = new ArrayList<>();
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class MakeContacts extends AppCompatActivity {
     setContentView(R.layout.make_contacts);
     AccessContact();
     btnview = (Button) findViewById(R.id.btnload);
+    listview = (Button) findViewById(R.id.lstload);
     txtname = (TextView) findViewById(R.id.txtname);
     txtphno = (TextView) findViewById(R.id.txtphno);
 
@@ -44,6 +48,22 @@ public class MakeContacts extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
             startActivityForResult(intent, PICK_CONTACT);
         }
+
+    });
+
+    listview.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MakeContacts.this, SelectedContacts.class);
+
+            Bundle b = new Bundle();
+            b.putStringArrayList("contacts_name", contacts_name);
+            b.putStringArrayList("contacts_number", contacts_number);
+
+            intent.putExtras(b);
+            startActivity(intent);
+        }
+
     });
 
 }
@@ -109,18 +129,25 @@ public class MakeContacts extends AppCompatActivity {
                         String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
                         String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
                         try {
+                            String cNumber = "N/A";
                             if (hasPhone.equalsIgnoreCase("1")) {
                                 Cursor phones = getContentResolver().query(
                                         ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                                         ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
                                         null, null);
                                 phones.moveToFirst();
-                                String cNumber = phones.getString(phones.getColumnIndex("data1"));
+                                cNumber = phones.getString(phones.getColumnIndex("data1"));
                                 System.out.println("number is:" + cNumber);
                                 txtphno.setText("Phone Number is: "+cNumber);
                             }
                             String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                             txtname.setText("Name is: "+name);
+
+                            if (cNumber.compareTo("N/A") != 0) {
+                                System.out.println(cNumber);
+                                contacts_name.add(name);
+                                contacts_number.add(cNumber);
+                            }
                         }
                         catch (Exception ex)
                         {
