@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                 //audioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
                 //audioManager.adjustStreamVolume(AudioManager.STREAM_VOICE_CALL, AudioManager.ADJUST_LOWER, 0);
-                Intent intent = new Intent(MainActivity.this, MakeProfile.class);
+                Intent intent = new Intent(MainActivity.this, ProfileName.class);
                 startActivity(intent);
             }
         });

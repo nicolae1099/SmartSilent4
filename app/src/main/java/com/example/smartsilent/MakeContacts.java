@@ -41,11 +41,19 @@ public class MakeContacts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.make_contacts);
+
+    // get profile name
+    Bundle b = this.getIntent().getExtras();
+    String profile_name = b.getString("profile_name");
+
     AccessContact();
     btnview = (Button) findViewById(R.id.btnload);
     listview = (Button) findViewById(R.id.lstload);
     txtname = (TextView) findViewById(R.id.txtname);
     txtphno = (TextView) findViewById(R.id.txtphno);
+
+    // now we should find out how to create a database at a specific location
+    // ex: profiles/profile_name/contacts.db
 
     context = getApplicationContext();
     database = new ContactsDatabaseHelper(context).getWritableDatabase();
@@ -65,8 +73,12 @@ public class MakeContacts extends AppCompatActivity {
             Intent intent = new Intent(MakeContacts.this, SelectedContacts.class);
 
             Bundle b = new Bundle();
-            b.putStringArrayList("contacts_name", contacts_name);
-            b.putStringArrayList("contacts_number", contacts_number);
+           // b.putStringArrayList("contacts_name", contacts_name);
+           // b.putStringArrayList("contacts_number", contacts_number);
+
+            Pair<ArrayList<String>, ArrayList<String>> contacts = getContacts();
+            b.putStringArrayList("contacts_name", contacts.first);
+            b.putStringArrayList("contacts_number", contacts.second);
 
             intent.putExtras(b);
             startActivity(intent);
@@ -178,7 +190,57 @@ public class MakeContacts extends AppCompatActivity {
         return values;
     }
 
+    private ContactsCursorWrapper queryContacts(String whereClause, String[] whereArgs) {
+        Cursor cursor = database.query(
+                ContactsDatabase.NAME,
+                null, // columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null  // orderBy
+        );
 
+        return new ContactsCursorWrapper(cursor);
+    }
+
+    public Pair<ArrayList<String>, ArrayList<String>> getContacts() {
+        Pair<ArrayList<String>, ArrayList<String>> contacts = new Pair(new ArrayList<String>(), new ArrayList<String>());
+
+        ContactsCursorWrapper cursor = queryContacts(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                contacts.first.add(cursor.getContact().first);
+                contacts.second.add(cursor.getContact().second);
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return contacts;
+    }
+
+    public Pair<String, String> getContact(String contact_name) {
+
+        ContactsCursorWrapper cursor = queryContacts(
+                ContactsDatabase.Cols.CONTACT_NAME + " = ?",
+                new String[] { contact_name.toString() }
+        );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getContact();
+        } finally {
+            cursor.close();
+        }
+    }
 
 
 }
