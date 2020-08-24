@@ -19,6 +19,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class MakeContacts extends AppCompatActivity {
     // ex: profiles/profile_name/contacts.db
 
     context = getApplicationContext();
-    database = new ContactsDatabaseHelper(context).getWritableDatabase();
+    database = new ContactsDatabaseHelper(context, profile_name).getWritableDatabase();
 
     btnview.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -157,19 +158,22 @@ public class MakeContacts extends AppCompatActivity {
                                         null, null);
                                 phones.moveToFirst();
                                 cNumber = phones.getString(phones.getColumnIndex("data1"));
-                                System.out.println("number is:" + cNumber);
-                                txtphno.setText("Phone Number is: "+cNumber);
+
+
+                               // System.out.println("number is:" + cNumber);
+                               // txtphno.setText("Phone Number is: "+cNumber);
                             }
                             String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                            txtname.setText("Name is: "+name);
+                            //txtname.setText("Name is: " + name);
 
                             if (cNumber.compareTo("N/A") != 0) {
                                 System.out.println(cNumber);
                                 //contacts_name.add(name);
                                 //contacts_number.add(cNumber);
-                                ContentValues values = getContentValues(name, cNumber);
-
-                                database.insert(ContactsDatabase.NAME, null, values);
+                                if(getContact(name) == null) {
+                                    ContentValues values = getContentValues(name, cNumber);
+                                    database.insertWithOnConflict(ContactsDatabase.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                                }
                             }
                         }
                         catch (Exception ex)

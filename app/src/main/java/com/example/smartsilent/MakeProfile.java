@@ -44,13 +44,18 @@ public class MakeProfile extends AppCompatActivity {
 
         // check if profiles directory exists <=> if the user created any profile before
         // if he didn't, create a profiles directory
-        Path path = FileSystems.getDefault().getPath("profiles");
+        Path path = FileSystems.getDefault().getPath(mContext.getFilesDir()+ "/profiles");
+        File mydir;
         if (!Files.exists(path)) {
-            File mydir = mContext.getDir("profiles", Context.MODE_PRIVATE);
+            mydir = new File(mContext.getFilesDir(), "profiles");
+            mydir.mkdir();
+        } else {
+            //mydir =
         }
 
         // get profile name that the user chose and send it to next activity
-        File profileDirName = new File("profiles" , profile_name);
+        File profileDirName = new File(mContext.getFilesDir() + "/profiles/" , profile_name);
+        profileDirName.mkdir();
 
         final Bundle profile = new Bundle();
         profile.putString("profile_name", profile_name);

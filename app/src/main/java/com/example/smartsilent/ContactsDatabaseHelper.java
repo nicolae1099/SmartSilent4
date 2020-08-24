@@ -9,8 +9,8 @@ ContactsDatabaseHelper  extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DATABASE_NAME = "contacts.db";
 
-    public ContactsDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, VERSION);
+    public ContactsDatabaseHelper(Context context, String profile_name) {
+        super(new DatabaseContext(context, profile_name), DATABASE_NAME, null, VERSION);
     }
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
