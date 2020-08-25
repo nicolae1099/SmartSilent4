@@ -1,4 +1,4 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 public class ContactsDatabase {
     public static final String NAME = "contacts";

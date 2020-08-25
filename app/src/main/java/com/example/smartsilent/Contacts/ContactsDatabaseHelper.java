@@ -1,8 +1,10 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.smartsilent.DatabaseContext;
 
 public class
 ContactsDatabaseHelper  extends SQLiteOpenHelper {

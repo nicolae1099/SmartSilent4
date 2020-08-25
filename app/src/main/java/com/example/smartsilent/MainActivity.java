@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity{
         if (!notificationManager.isNotificationPolicyAccessGranted()) {
 
             Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+
             startActivity(intent);
         }
         addProfile.setOnClickListener(new View.OnClickListener() {

@@ -46,7 +46,7 @@ public class ProfileName extends AppCompatActivity {
                     Intent intent = new Intent(ProfileName.this, MakeProfile.class);
 
                     Bundle b = new Bundle();
-
+                    b.putString("activity", "main");
                     b.putString("profile_name", mEdit.getText().toString());
 
                     intent.putExtras(b);

@@ -1,4 +1,4 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;

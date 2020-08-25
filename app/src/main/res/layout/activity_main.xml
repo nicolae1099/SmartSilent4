@@ -21,17 +21,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/add_profile"
         app:layout_constraintBottom_toTopOf="@+id/add_new_profile_button"
-        app:layout_constraintEnd_toEndOf="@+id/add_new_profile_button" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/my_profiles_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="52dp"
         android:text="@string/my_profiles"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

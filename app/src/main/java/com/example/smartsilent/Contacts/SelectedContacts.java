@@ -1,4 +1,4 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 import android.os.Bundle;
 import android.util.Pair;
@@ -6,6 +6,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.smartsilent.R;
 
 import java.util.ArrayList;
 

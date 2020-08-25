@@ -1,4 +1,4 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,18 +19,19 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
+import com.example.smartsilent.Profile;
+import com.example.smartsilent.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MakeContacts extends AppCompatActivity {
-    Button btnview, listview;
+    Button btnview, listview, backButton;
     TextView txtname,txtphno;
     private Context context;
-    private SQLiteDatabase database;
+    private Profile mProfile;
 
     final private int PICK_CONTACT = 1;
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
@@ -46,6 +47,7 @@ public class MakeContacts extends AppCompatActivity {
     // get profile name
     Bundle b = this.getIntent().getExtras();
     String profile_name = b.getString("profile_name");
+    mProfile = b.getParcelable("profile");
 
     AccessContact();
     btnview = (Button) findViewById(R.id.btnload);
@@ -57,7 +59,7 @@ public class MakeContacts extends AppCompatActivity {
     // ex: profiles/profile_name/contacts.db
 
     context = getApplicationContext();
-    database = new ContactsDatabaseHelper(context, profile_name).getWritableDatabase();
+
 
     btnview.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -74,13 +76,12 @@ public class MakeContacts extends AppCompatActivity {
             Intent intent = new Intent(MakeContacts.this, SelectedContacts.class);
 
             Bundle b = new Bundle();
-           // b.putStringArrayList("contacts_name", contacts_name);
-           // b.putStringArrayList("contacts_number", contacts_number);
+            b.putStringArrayList("contacts_name", (ArrayList<String>) mProfile.getContactsNames());
+            b.putStringArrayList("contacts_number", (ArrayList<String>) mProfile.getContactsNumbers());
 
-            Pair<ArrayList<String>, ArrayList<String>> contacts = getContacts();
-            b.putStringArrayList("contacts_name", contacts.first);
-            b.putStringArrayList("contacts_number", contacts.second);
-
+           // Pair<ArrayList<String>, ArrayList<String>> contacts = getContacts();
+           // b.putStringArrayList("contacts_name", contacts.first);
+           // b.putStringArrayList("contacts_number", contacts.second);
             intent.putExtras(b);
             startActivity(intent);
         }
@@ -164,16 +165,9 @@ public class MakeContacts extends AppCompatActivity {
                                // txtphno.setText("Phone Number is: "+cNumber);
                             }
                             String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                            //txtname.setText("Name is: " + name);
-
-                            if (cNumber.compareTo("N/A") != 0) {
-                                System.out.println(cNumber);
-                                //contacts_name.add(name);
-                                //contacts_number.add(cNumber);
-                                if(getContact(name) == null) {
-                                    ContentValues values = getContentValues(name, cNumber);
-                                    database.insertWithOnConflict(ContactsDatabase.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-                                }
+                            if(!mProfile.getContactsNames().contains(name) && cNumber.compareTo("N/A") != 0) {
+                                mProfile.addContactName(name);
+                                mProfile.addContactNumber(cNumber);
                             }
                         }
                         catch (Exception ex)
@@ -186,65 +180,13 @@ public class MakeContacts extends AppCompatActivity {
         }
     }
 
-    private static ContentValues getContentValues(String name, String cNumber) {
-        ContentValues values = new ContentValues();
-        values.put(ContactsDatabase.Cols.CONTACT_NAME, name);
-        values.put(ContactsDatabase.Cols.PHONE_NUMBER, cNumber);
 
-        return values;
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("activity","contacts");
+        intent.putExtra("profile", mProfile);
+        setResult(Activity.RESULT_OK,intent);
+        finish();//finishing activity
     }
-
-    private ContactsCursorWrapper queryContacts(String whereClause, String[] whereArgs) {
-        Cursor cursor = database.query(
-                ContactsDatabase.NAME,
-                null, // columns - null selects all columns
-                whereClause,
-                whereArgs,
-                null, // groupBy
-                null, // having
-                null  // orderBy
-        );
-
-        return new ContactsCursorWrapper(cursor);
-    }
-
-    public Pair<ArrayList<String>, ArrayList<String>> getContacts() {
-        Pair<ArrayList<String>, ArrayList<String>> contacts = new Pair(new ArrayList<String>(), new ArrayList<String>());
-
-        ContactsCursorWrapper cursor = queryContacts(null, null);
-
-        try {
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                contacts.first.add(cursor.getContact().first);
-                contacts.second.add(cursor.getContact().second);
-                cursor.moveToNext();
-            }
-        } finally {
-            cursor.close();
-        }
-
-        return contacts;
-    }
-
-    public Pair<String, String> getContact(String contact_name) {
-
-        ContactsCursorWrapper cursor = queryContacts(
-                ContactsDatabase.Cols.CONTACT_NAME + " = ?",
-                new String[] { contact_name.toString() }
-        );
-
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-
-            cursor.moveToFirst();
-            return cursor.getContact();
-        } finally {
-            cursor.close();
-        }
-    }
-
-
 }

@@ -38,8 +38,8 @@
         </receiver>
         <activity android:name=".MakeProfile"></activity>
         <activity android:name=".ProfileName"></activity>
-        <activity android:name=".MakeContacts"></activity>
-        <activity android:name=".SelectedContacts"></activity>
+        <activity android:name=".Contacts.MakeContacts"></activity>
+        <activity android:name=".Contacts.SelectedContacts"></activity>
     </application>
 
 </manifest>
