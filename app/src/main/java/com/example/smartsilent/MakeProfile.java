@@ -24,6 +24,8 @@ import com.example.smartsilent.Location.MapsActivity;
 import com.example.smartsilent.TimeZone.MakeTimeZone;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -118,13 +120,33 @@ public class MakeProfile extends AppCompatActivity {
                     ArrayList<String> contactsNames = (ArrayList<String> )mProfile.getContactsNames();
                     ArrayList<String> contactsNumbers = (ArrayList<String> )mProfile.getContactsNumbers();
 
+                    DatabaseQuery query = new DatabaseQuery(mDatabase);
                     // add in database
                     for(int i = 0; i < contactsNames.size(); i++) {
-                        if(getContact(contactsNames.get(i)) == null) {
-                            ContentValues values = getContentValues(contactsNames.get(i), contactsNumbers.get(i));
+                        if(query.getContact(contactsNames.get(i)) == null) {
+                            ContentValues values = query.getContentValues(contactsNames.get(i), contactsNumbers.get(i));
                             mDatabase.insertWithOnConflict(ContactsDatabase.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                         }
                     }
+
+                    mDatabase.close();
+
+                    File active = new File(getApplicationContext().getFilesDir() , "profiles");
+                    File mimi = new File (active, "active_profiles");
+                    FileWriter myWriter = null;
+                    try {
+                        myWriter = new FileWriter(mimi);
+                        try {
+                            myWriter.write(profile_name);
+                            myWriter.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
 
                 }
                 startActivity(intent);
@@ -157,65 +179,7 @@ public class MakeProfile extends AppCompatActivity {
         }
     }
 
-    private static ContentValues getContentValues(String name, String cNumber) {
-        ContentValues values = new ContentValues();
-        values.put(ContactsDatabase.Cols.CONTACT_NAME, name);
-        values.put(ContactsDatabase.Cols.PHONE_NUMBER, cNumber);
 
-        return values;
-    }
-
-    private ContactsCursorWrapper queryContacts(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(
-                ContactsDatabase.NAME,
-                null, // columns - null selects all columns
-                whereClause,
-                whereArgs,
-                null, // groupBy
-                null, // having
-                null  // orderBy
-        );
-
-        return new ContactsCursorWrapper(cursor);
-    }
-
-    public Pair<ArrayList<String>, ArrayList<String>> getContacts() {
-        Pair<ArrayList<String>, ArrayList<String>> contacts = new Pair(new ArrayList<String>(), new ArrayList<String>());
-
-        ContactsCursorWrapper cursor = queryContacts(null, null);
-
-        try {
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                contacts.first.add(cursor.getContact().first);
-                contacts.second.add(cursor.getContact().second);
-                cursor.moveToNext();
-            }
-        } finally {
-            cursor.close();
-        }
-
-        return contacts;
-    }
-
-    public Pair<String, String> getContact(String contact_name) {
-
-        ContactsCursorWrapper cursor = queryContacts(
-                ContactsDatabase.Cols.CONTACT_NAME + " = ?",
-                new String[] { contact_name.toString() }
-        );
-
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-
-            cursor.moveToFirst();
-            return cursor.getContact();
-        } finally {
-            cursor.close();
-        }
-    }
 
 
 }

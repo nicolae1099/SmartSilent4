@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity{
         if (!Files.exists(path)) {
             mydir = new File(getApplicationContext().getFilesDir(), "profiles");
             mydir.mkdir();
+
+            //File active_profiles = new File(getApplicationContext().getFilesDir() + "/profiles", "active_profiles");
+           // active_profiles.mkdir();
         }
 
         if (!notificationManager.isNotificationPolicyAccessGranted()) {
