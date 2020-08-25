@@ -180,8 +180,9 @@ public class MakeContacts extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("activity","contacts");
+        intent.putExtra("activity", "contacts");
         intent.putExtra("profile", mProfile);
-        setResult(Activity.RESULT_OK,intent);
+        setResult(Activity.RESULT_OK, intent);
         finish();
+    }
 }
