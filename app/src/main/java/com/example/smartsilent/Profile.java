@@ -6,6 +6,11 @@ import android.os.Parcelable;
 
 import java.util.List;
 
+/**
+ This class acts as a package containing all data within a user profile: contacts info,
+ timezones and locations
+ */
+
 public class Profile implements Parcelable {
 
     private List<String> mContactsNames;

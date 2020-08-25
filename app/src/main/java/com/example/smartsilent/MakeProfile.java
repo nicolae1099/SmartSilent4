@@ -31,6 +31,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+/**
+ This class represents the activity where the user can create a custom profile.
+ He can choose to custom his profile with contacts, timezones and/or locations,
+ by pressing the corresponding button.
+ The profile is saved in the database when the user presses the "save" button.
+ */
 public class MakeProfile extends AppCompatActivity {
 
     Button locationButton;
@@ -42,12 +48,10 @@ public class MakeProfile extends AppCompatActivity {
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
-
     final private int MAKE_CONTACTS = 1;
     final private int MAKE_TIMEZONE = 2;
     final private int MAKE_LOCATIONS = 3;
 
-    // de adaugat verificare prima
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,38 +60,23 @@ public class MakeProfile extends AppCompatActivity {
 
         mContext = getApplicationContext();
 
-        //mProfileDatabase = new ProfileDatabaseHelper(mContext).getWritableDatabase();
-
         Bundle b = this.getIntent().getExtras();
         final String previous_activity = b.getString("activity");
 
-        // if the previous activity was the MainActivity, create a new Profile Object,
-        // otherwise, retrieve the Profile Object from the previous activity
-        switch(previous_activity) {
-            case "main":
-                mProfile = new Profile(new ArrayList<String>(), new ArrayList<String>());
-                break;
-            default:
-                mProfile = this.getIntent().getParcelableExtra("profile");
-
+        // if the previous activity was the MainActivity, create a new Profile Object
+        if(previous_activity.compareTo("main") == 0) {
+            mProfile = new Profile(new ArrayList<String>(), new ArrayList<String>());
         }
+
         final String profile_name = b.getString("profile_name");
-
-        // check if profiles directory exists <=> if the user created any profile before
-        // if he didn't, create a profiles directory
-        Path path = FileSystems.getDefault().getPath(mContext.getFilesDir()+ "/profiles");
-        File mydir;
-        if (!Files.exists(path)) {
-            mydir = new File(mContext.getFilesDir(), "profiles");
-            mydir.mkdir();
-        }
 
         // get profile name that the user chose and send it to next activity
         File profileDirName = new File(mContext.getFilesDir() + "/profiles/" , profile_name);
         profileDirName.mkdir();
 
+        /* pass to the next activity the name of the current activity and
+        the current Profile */
         final Bundle profile = new Bundle();
-        profile.putString("profile_name", profile_name);
         profile.putParcelable("profile", mProfile);
         profile.putString("activiy", "make_profile");
 
@@ -147,6 +136,11 @@ public class MakeProfile extends AppCompatActivity {
             }
         });
     }
+
+    /** This method retrieves the returned value of the previous finished activity.
+     * @param data contains a Profile object, customized by the user in one of the
+     *             customisation activities: contacts, timezone or locations
+    */
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         switch (reqCode) {

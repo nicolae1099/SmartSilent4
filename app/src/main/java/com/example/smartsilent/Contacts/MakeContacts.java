@@ -46,7 +46,6 @@ public class MakeContacts extends AppCompatActivity {
 
     // get profile name
     Bundle b = this.getIntent().getExtras();
-    String profile_name = b.getString("profile_name");
     mProfile = b.getParcelable("profile");
 
     AccessContact();
@@ -55,11 +54,7 @@ public class MakeContacts extends AppCompatActivity {
     txtname = (TextView) findViewById(R.id.txtname);
     txtphno = (TextView) findViewById(R.id.txtphno);
 
-    // now we should find out how to create a database at a specific location
-    // ex: profiles/profile_name/contacts.db
-
     context = getApplicationContext();
-
 
     btnview.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -79,9 +74,6 @@ public class MakeContacts extends AppCompatActivity {
             b.putStringArrayList("contacts_name", (ArrayList<String>) mProfile.getContactsNames());
             b.putStringArrayList("contacts_number", (ArrayList<String>) mProfile.getContactsNumbers());
 
-           // Pair<ArrayList<String>, ArrayList<String>> contacts = getContacts();
-           // b.putStringArrayList("contacts_name", contacts.first);
-           // b.putStringArrayList("contacts_number", contacts.second);
             intent.putExtras(b);
             startActivity(intent);
         }
@@ -140,6 +132,9 @@ public class MakeContacts extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * This method saves the selected contacts in the Profile object
+     */
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         switch (reqCode) {
@@ -160,10 +155,9 @@ public class MakeContacts extends AppCompatActivity {
                                 phones.moveToFirst();
                                 cNumber = phones.getString(phones.getColumnIndex("data1"));
 
-
-                               // System.out.println("number is:" + cNumber);
-                               // txtphno.setText("Phone Number is: "+cNumber);
                             }
+
+                            // add selected contact to profile if it wasnt previously selected
                             String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                             if(!mProfile.getContactsNames().contains(name) && cNumber.compareTo("N/A") != 0) {
                                 mProfile.addContactName(name);
@@ -180,13 +174,14 @@ public class MakeContacts extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * This method returns the customized profile to the "make_profile" activity
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
         intent.putExtra("activity","contacts");
         intent.putExtra("profile", mProfile);
         setResult(Activity.RESULT_OK,intent);
-        finish();//finishing activity
-    }
+        finish();
 }

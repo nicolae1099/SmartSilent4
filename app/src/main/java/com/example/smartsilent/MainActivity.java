@@ -1,5 +1,6 @@
 package com.example.smartsilent;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -16,6 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity{
     AudioManager audioManager;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +42,15 @@ public class MainActivity extends AppCompatActivity{
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        /* check if profiles directory exists <=> if the user created any profile before
+        if he didn't, create a profiles directory */
+        Path path = FileSystems.getDefault().getPath(getApplicationContext().getFilesDir()+ "/profiles");
+        File mydir;
+        if (!Files.exists(path)) {
+            mydir = new File(getApplicationContext().getFilesDir(), "profiles");
+            mydir.mkdir();
+        }
 
         if (!notificationManager.isNotificationPolicyAccessGranted()) {
 
