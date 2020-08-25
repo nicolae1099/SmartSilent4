@@ -3,11 +3,14 @@ package com.example.smartsilent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.smartsilent.Contacts.ContactsDatabaseHelper;
 
 public class CallReceiver extends BroadcastReceiver {
 
@@ -40,6 +43,7 @@ public class CallReceiver extends BroadcastReceiver {
         }
         //customPhoneListener.onCallStateChanged(context, state, phone_number);
         Toast.makeText(context, "Phone Number " + phone_number , Toast.LENGTH_SHORT).show();
+
     }
 }
 
