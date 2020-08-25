@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -22,13 +20,10 @@ import com.example.smartsilent.Contacts.ContactsCursorWrapper;
 import com.example.smartsilent.Contacts.ContactsDatabase;
 import com.example.smartsilent.Contacts.ContactsDatabaseHelper;
 import com.example.smartsilent.Contacts.MakeContacts;
-import com.example.smartsilent.Location.MakeLocation;
+import com.example.smartsilent.Location.MapsActivity;
 import com.example.smartsilent.TimeZone.MakeTimeZone;
 
 import java.io.File;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
@@ -84,7 +79,7 @@ public class MakeProfile extends AppCompatActivity {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MakeProfile.this, MakeLocation.class);
+                Intent intent = new Intent(MakeProfile.this, MapsActivity.class);
                 intent.putExtras(profile);
                 startActivity(intent);
             }

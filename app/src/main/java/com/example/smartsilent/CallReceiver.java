@@ -16,7 +16,7 @@ public class CallReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Log.w("intent " , intent.getAction().toString());
+
         TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         MyPhoneStateListener customPhoneListener = new MyPhoneStateListener();
 
@@ -47,38 +47,3 @@ public class CallReceiver extends BroadcastReceiver {
     }
 }
 
-/*import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.telephony.TelephonyManager;
-import android.util.Log;
-
-
-
-public class CallReceiver extends BroadcastReceiver {
-    private final static String TAG = "Tagg";
-    @Override
-    public void onReceive(Context arg0, Intent arg1) {
-
-        if(arg1.getAction().equals("android.intent.action.PHONE_STATE")){
-
-            String state = arg1.getStringExtra(TelephonyManager.EXTRA_STATE);
-
-            if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
-                Log.d(TAG, "Inside Extra state off hook");
-                //String number = arg1.getStringExtra(TelephonyManager.EXTRA_PHONE_NUMBER);
-                //Log.e(TAG, "outgoing number : " + number);
-            }
-
-            else if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)){
-                Log.e(TAG, "Inside EXTRA_STATE_RINGING");
-                String number = arg1.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                Log.e(TAG, "incoming number : " + number);
-            }
-            else if(state.equals(TelephonyManager.EXTRA_STATE_IDLE)){
-                Log.d(TAG, "Inside EXTRA_STATE_IDLE");
-            }
-        }
-    }
-}
-*/
