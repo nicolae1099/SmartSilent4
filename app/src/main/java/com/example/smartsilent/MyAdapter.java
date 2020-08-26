@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,19 +44,30 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return mData.size();
     }
 
-    // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
 
+
+    // stores and recycles views as they are scrolled off screen
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView myTextView;
+        Switch switchProfile;
+        ImageButton trash_button;
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.profile_name_recyclerview);
-            itemView.setOnClickListener(this);
-        }
+            switchProfile = itemView.findViewById(R.id.switch_profile);
+            trash_button = itemView.findViewById(R.id.trash_button);
 
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            switchProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Boolean switchState = switchProfile.isChecked();
+                    if (switchState == true) {
+                        switchProfile.setText("Activ");
+                    } else {
+                        switchProfile.setText("Inactiv");
+                    }
+                }
+            });
         }
     }
 
