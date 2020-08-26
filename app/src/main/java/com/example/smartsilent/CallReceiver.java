@@ -123,11 +123,8 @@ public class CallReceiver extends BroadcastReceiver {
             if (contactLookup != null && contactLookup.getCount() > 0) {
                 contactLookup.moveToNext();
                 name = contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.DISPLAY_NAME));
-                // this.id =
-                // contactLookup.getString(contactLookup.getColumnIndex(ContactsContract.Data.CONTACT_ID));
-                // String contactId =
-                // contactLookup.getString(contactLookup.getColumnIndex(BaseColumns._ID));
-            }else{
+
+            } else{
                 name = "Unknown number";
             }
         } finally {

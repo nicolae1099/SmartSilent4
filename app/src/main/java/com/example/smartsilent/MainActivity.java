@@ -28,8 +28,9 @@ import static android.media.AudioManager.ADJUST_RAISE;
 
 public class MainActivity extends AppCompatActivity{
 
-    ImageButton addProfile;
-    AudioManager audioManager;
+    private ImageButton addProfile;
+    private AudioManager audioManager;
+    private Button mProfilesButton;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity{
 
         addProfile = findViewById(R.id.add_new_profile_button);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mProfilesButton = findViewById(R.id.my_profiles_button);
+
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -68,6 +71,14 @@ public class MainActivity extends AppCompatActivity{
                 //audioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
                 //audioManager.adjustStreamVolume(AudioManager.STREAM_VOICE_CALL, AudioManager.ADJUST_LOWER, 0);
                 Intent intent = new Intent(MainActivity.this, ProfileName.class);
+                startActivity(intent);
+            }
+        });
+
+        mProfilesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, MyProfiles.class);
                 startActivity(intent);
             }
         });
