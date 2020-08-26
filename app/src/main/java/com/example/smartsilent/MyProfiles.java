@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class MyProfiles extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class MyProfiles extends AppCompatActivity {
         File f = new File(getApplicationContext().getFilesDir()  + "/profiles");
         pathnames = f.list();
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.profiles_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview_layout);
 
         recyclerView.setHasFixedSize(true);
 
@@ -33,7 +34,7 @@ public class MyProfiles extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(pathnames);
+        mAdapter = new MyAdapter(this, Arrays.asList(pathnames));
         recyclerView.setAdapter(mAdapter);
     }
 }
