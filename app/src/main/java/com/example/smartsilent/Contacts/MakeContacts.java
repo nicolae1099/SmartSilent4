@@ -86,6 +86,7 @@ public class MakeContacts extends AppCompatActivity {
         if (!addPermission(permissionsList, Manifest.permission.WRITE_CONTACTS))
             permissionsNeeded.add("Write Contacts");
         if (permissionsList.size() > 0) {
+            //TODO sa vedem ce face asta
             if (permissionsNeeded.size() > 0) {
                 String message = "You need to grant access to " + permissionsNeeded.get(0);
                 for (int i = 1; i < permissionsNeeded.size(); i++)

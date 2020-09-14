@@ -64,6 +64,7 @@
         <activity android:name=".ProfileName" />
         <activity android:name=".Contacts.MakeContacts" />
         <activity android:name=".Contacts.SelectedContacts" />
+        <activity android:name=".MyProfiles" />
     </application>
 
 </manifest>
