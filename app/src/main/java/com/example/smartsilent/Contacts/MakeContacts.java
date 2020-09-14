@@ -28,16 +28,13 @@ import java.util.List;
 
 
 public class MakeContacts extends AppCompatActivity {
-    Button btnview, listview, backButton;
+    Button btnview, listview;
     TextView txtname,txtphno;
     private Context context;
     private Profile mProfile;
 
     final private int PICK_CONTACT = 1;
     final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
-
-    ArrayList<String> contacts_name = new ArrayList<>();
-    ArrayList<String> contacts_number = new ArrayList<>();
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +76,7 @@ public class MakeContacts extends AppCompatActivity {
         }
 
     });
-
 }
-
-
     private void AccessContact()
     {
         List<String> permissionsNeeded = new ArrayList<String>();

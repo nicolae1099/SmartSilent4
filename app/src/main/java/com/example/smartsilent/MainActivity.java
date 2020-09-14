@@ -13,9 +13,16 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
+
+import com.example.smartsilent.Contacts.MakeContacts;
+import com.example.smartsilent.Location.MapsActivity;
+import com.example.smartsilent.TimeZone.MakeTimeZone;
 
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -26,7 +33,7 @@ import java.util.List;
 
 import static android.media.AudioManager.ADJUST_RAISE;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     ImageButton addProfile;
     AudioManager audioManager;
@@ -37,6 +44,8 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkAndRequestPermissions();
 
         addProfile = findViewById(R.id.add_new_profile_button);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -61,7 +70,7 @@ public class MainActivity extends AppCompatActivity{
 
             startActivity(intent);
         }
-        addProfile.setOnClickListener(new View.OnClickListener() {
+        /*addProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
@@ -71,7 +80,9 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-        checkAndRequestPermissions();
+
+         */
+
 
     }
 
@@ -96,22 +107,34 @@ public class MainActivity extends AppCompatActivity{
         }
         return true;
     }
+
+    public void showPopup(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.popup_menu);
+        popupMenu.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        Intent intent;
+        switch (menuItem.getItemId()){
+            case R.id.item1:
+                intent = new Intent(MainActivity.this, MapsActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.item2:
+                intent = new Intent(MainActivity.this, MakeContacts.class);
+                startActivity(intent);
+                return true;
+            case R.id.item3:
+                intent = new Intent(MainActivity.this, MakeTimeZone.class);
+                startActivity(intent);
+                return true;
+            default:
+                return false;
+
+        }
+
+    }
 }
-
-/*
-        if (getApplicationContext().checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission has not been granted, therefore prompt the user to grant permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_ID_MULTIPLE_PERMISSIONS);
-        }
-
-        if (getApplicationContext().checkSelfPermission(Manifest.permission.PROCESS_OUTGOING_CALLS)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission has not been granted, therefore prompt the user to grant permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS},
-                    REQUEST_ID_MULTIPLE_PERMISSIONS);
-        }
-
- */
