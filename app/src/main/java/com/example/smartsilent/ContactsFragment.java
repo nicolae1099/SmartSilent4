@@ -69,10 +69,7 @@ public class ContactsFragment extends Fragment implements
      */
     @SuppressLint("InlinedApi")
     private final static String[] FROM_COLUMNS = {
-            Build.VERSION.SDK_INT
-                    >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
-                    ContactsContract.Contacts.DISPLAY_NAME
+            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
     };
 
 
@@ -140,10 +137,7 @@ public class ContactsFragment extends Fragment implements
             {
                     ContactsContract.Contacts._ID,
                     ContactsContract.Contacts.LOOKUP_KEY,
-                    Build.VERSION.SDK_INT
-                            >= Build.VERSION_CODES.HONEYCOMB ?
-                            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :
-                            ContactsContract.Contacts.DISPLAY_NAME
+                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
 
             };
 

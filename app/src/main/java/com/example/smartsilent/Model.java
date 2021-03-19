@@ -3,13 +3,11 @@ package com.example.smartsilent;
 public class Model {
 
     private String name, phone_number;
-    private int img;
-    boolean isChecked = false;
+    private boolean isChecked = false;
 
-    public Model(String title, String data, int img) {
+    public Model(String title, String phoneNumber) {
         this.name = title;
-        this.phone_number = data;
-        this.img = img;
+        this.phone_number = phoneNumber;
     }
 
     public String getName() {
@@ -26,14 +24,6 @@ public class Model {
 
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
-    }
-
-    public int getImg() {
-        return img;
-    }
-
-    public void setImg(int img) {
-        this.img = img;
     }
 
     public void check() {

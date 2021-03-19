@@ -33,7 +33,7 @@ import java.util.List;
 
 import static android.media.AudioManager.ADJUST_RAISE;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
     ImageButton addProfile;
     AudioManager audioManager;
@@ -44,13 +44,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        addProfile = findViewById(R.id.add_new_profile_button);
 
         checkAndRequestPermissions();
-
-        addProfile = findViewById(R.id.add_new_profile_button);
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         /* check if profiles directory exists <=> if the user created any profile before
         if he didn't, create a profiles directory */
@@ -59,37 +55,29 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         if (!Files.exists(path)) {
             mydir = new File(getApplicationContext().getFilesDir(), "profiles");
             mydir.mkdir();
-
-            //File active_profiles = new File(getApplicationContext().getFilesDir() + "/profiles", "active_profiles");
-           // active_profiles.mkdir();
         }
 
-        if (!notificationManager.isNotificationPolicyAccessGranted()) {
-
-            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-
-            startActivity(intent);
-        }
         addProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                //audioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
-                //audioManager.adjustStreamVolume(AudioManager.STREAM_VOICE_CALL, AudioManager.ADJUST_LOWER, 0);
-                Intent intent = new Intent(MainActivity.this, ProfileName.class);
+                Intent intent = new Intent(MainActivity.this, MakeProfile.class);
                 startActivity(intent);
             }
         });
-
-
-
-
     }
 
     private  boolean checkAndRequestPermissions() {
+        NotificationManager notificationManager =
+            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        if (!notificationManager.isNotificationPolicyAccessGranted()) {
+            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            startActivity(intent);
+        }
         int readPhoneState = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
         int read_call_log = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG);
+        int read_contacts = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+
         List listPermissionsNeeded = new ArrayList<>();
         if (readPhoneState != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
@@ -99,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             listPermissionsNeeded.add(Manifest.permission.READ_CALL_LOG);
         }
 
+        if (read_contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this,
                     (String[]) listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
@@ -106,35 +98,5 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             return false;
         }
         return true;
-    }
-
-    public void showPopup(View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.setOnMenuItemClickListener(this);
-        popupMenu.inflate(R.menu.popup_menu);
-        popupMenu.show();
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        Intent intent;
-        switch (menuItem.getItemId()){
-            case R.id.item1:
-                intent = new Intent(MainActivity.this, MapsActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.item2:
-                intent = new Intent(MainActivity.this, MakeContacts.class);
-                startActivity(intent);
-                return true;
-            case R.id.item3:
-                intent = new Intent(MainActivity.this, MakeTimeZone.class);
-                startActivity(intent);
-                return true;
-            default:
-                return false;
-
-        }
-
     }
 }

@@ -30,7 +30,7 @@ public class CallReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        MyPhoneStateListener customPhoneListener = new MyPhoneStateListener();
+        PhoneStateListener customPhoneListener = new PhoneStateListener();
 
         telephony.listen(customPhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 
@@ -103,8 +103,6 @@ public class CallReceiver extends BroadcastReceiver {
                 }
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

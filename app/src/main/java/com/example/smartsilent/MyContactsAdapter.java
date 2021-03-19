@@ -35,7 +35,6 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyHolder> {
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         holder.mName.setText(models.get(position).getName());
         holder.mPhoneNumber.setText(models.get(position).getPhone_number());
-        holder.mImageView.setImageResource(models.get(position).getImg());
 
         if(isSelectedAll) {
             Log.e("IsChecked", "checked");
@@ -65,10 +64,6 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyHolder> {
 
         isSelectedAll=!isSelectedAll;
         notifyDataSetChanged();
-    }
-
-    public ArrayList<Model> getModels() {
-        return models;
     }
 
 }

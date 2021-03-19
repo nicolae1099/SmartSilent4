@@ -46,10 +46,10 @@ public class MakeContacts extends AppCompatActivity {
     mProfile = b.getParcelable("profile");
 
     AccessContact();
-    btnview = (Button) findViewById(R.id.btnload);
-    listview = (Button) findViewById(R.id.lstload);
-    txtname = (TextView) findViewById(R.id.txtname);
-    txtphno = (TextView) findViewById(R.id.txtphno);
+    btnview = findViewById(R.id.btnload);
+    listview = findViewById(R.id.lstload);
+    txtname = findViewById(R.id.txtname);
+    txtphno = findViewById(R.id.txtphno);
 
     context = getApplicationContext();
 
@@ -103,7 +103,6 @@ public class MakeContacts extends AppCompatActivity {
             }
             requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                     REQUEST_MULTIPLE_PERMISSIONS);
-            return;
         }
     }
 

@@ -21,13 +21,13 @@ import java.util.Map;
 
 public class DisplayContacts extends AppCompatActivity {
 
-    Switch selectAll;
-    TextView confirm_selection;
-    TextView cancel_selection;
-    RecyclerView mRecyclerView;
-    MyContactsAdapter myAdapter;
-    ArrayList<Model> models = new ArrayList<>();
-    Profile contacts = new Profile();
+    private Switch selectAll;
+    private TextView confirm_selection;
+    private TextView cancel_selection;
+    private RecyclerView mRecyclerView;
+    private MyContactsAdapter myAdapter;
+    private ArrayList<Model> models = new ArrayList<>();
+    private Profile contacts = new Profile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,10 @@ public class DisplayContacts extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                for(int i = 0; i < models.size(); i++) {
-                    if(!(models.get(i).getCheck())) {
-                        contacts.addContactName(models.get(i).getName());
-                        contacts.addContactNumber(models.get(i).getPhone_number());
+                for(Model model : models) {
+                    if(!(model.getCheck())) {
+                        contacts.addContactName(model.getName());
+                        contacts.addContactNumber(model.getPhone_number());
                     }
                 }
 
@@ -50,7 +50,6 @@ public class DisplayContacts extends AppCompatActivity {
                 returnIntent.putExtra("contacts", contacts);
                 setResult(Activity.RESULT_OK,returnIntent);
                 finish();
-
             }
         });
 
@@ -83,10 +82,8 @@ public class DisplayContacts extends AppCompatActivity {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-
         }
     }
-
 
    private void getContactsList() {
         ContentResolver resolver;
@@ -125,25 +122,13 @@ public class DisplayContacts extends AppCompatActivity {
                 getContactsCursor.moveToNext()) {
             long contactId = getContactsCursor.getLong(0);
             String name = getContactsCursor.getString(1);
-            String photo = getContactsCursor.getString(2);
             List<String> contactPhones = phones.get(contactId);
             if (contactPhones != null) {
                 for (String phone :
                         contactPhones) {
-                    models.add(new Model(name, phone, 0));
+                    models.add(new Model(name, phone));
                 }
             }
-        }
-    }
-
-
-    static class Contact {
-        String name;
-        String phone_number;
-
-        public Contact(String name, String phone) {
-            this.name = name;
-            this.phone_number = phone;
         }
     }
 }
