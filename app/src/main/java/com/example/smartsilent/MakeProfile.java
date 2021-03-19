@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +49,7 @@ public class MakeProfile extends AppCompatActivity {
     final private int MAKE_CONTACTS = 1;
     final private int MAKE_TIMEZONE = 2;
     final private int MAKE_LOCATIONS = 3;
+    final private int LAUNCH_SECOND_ACTIVITY = 4;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -91,9 +93,14 @@ public class MakeProfile extends AppCompatActivity {
         contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MakeProfile.this, MakeContacts.class);
+               /* Intent intent = new Intent(MakeProfile.this, MakeContacts.class);
                 intent.putExtras(profile);
                 startActivityForResult(intent, MAKE_CONTACTS);
+                */
+                Intent intent = new Intent(MakeProfile.this, DisplayContacts.class);
+                startActivityForResult(intent, MAKE_CONTACTS);
+
+
             }
         });
 
@@ -163,7 +170,7 @@ public class MakeProfile extends AppCompatActivity {
         switch (reqCode) {
             case (MAKE_CONTACTS):
                 if (resultCode == Activity.RESULT_OK) {
-                    Profile contactsInfo = data.getParcelableExtra("profile");
+                    Profile contactsInfo = data.getParcelableExtra("contacts");
                     ArrayList<String> contactsName = (ArrayList<String>) contactsInfo.getContactsNames();
                     ArrayList<String> contactsNumber = (ArrayList<String>) contactsInfo.getContactsNumbers();
 

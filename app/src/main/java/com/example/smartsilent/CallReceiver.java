@@ -36,7 +36,7 @@ public class CallReceiver extends BroadcastReceiver {
 
         Bundle bundle = intent.getExtras();
         String phone_number = bundle.getString("incoming_number");
-        System.out.println("phone number isssssss " + phone_number);
+        System.out.println("Phone number is: " + phone_number);
 
         String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
         // String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".RecommendedEvents"
+
+    app:cardCornerRadius="3dp"
+    app:cardUseCompatPadding="true"
+    >
+
+    <RelativeLayout
+        android:layout_width="411dp"
+        android:layout_height="93dp">
+
+        <TextView
+            android:id="@+id/name_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="128dp"
+            android:layout_marginTop="22dp"
+            android:text="Name"
+            android:textColor="#000"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="153dp"
+            android:layout_height="128dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-12dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="270dp"
+            android:layout_marginBottom="10dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/phone_number_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="129dp"
+            android:layout_marginBottom="13dp"
+            android:text="Phone Number"
+            android:textColor="#a9a9a9"
+            android:textSize="18sp" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="347dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="31dp" />
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

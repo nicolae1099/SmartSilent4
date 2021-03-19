@@ -16,6 +16,10 @@ public class Profile implements Parcelable {
     private List<String> mContactsNames;
     private List<String> mContactsNumbers;
 
+    protected Profile() {
+
+    }
+
     protected Profile(Parcel in) {
         this.mContactsNames = in.createStringArrayList();
         this.mContactsNumbers = in.createStringArrayList();

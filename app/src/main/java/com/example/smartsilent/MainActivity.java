@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
             startActivity(intent);
         }
-        /*addProfile.setOnClickListener(new View.OnClickListener() {
+        addProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
-         */
+
 
 
     }
