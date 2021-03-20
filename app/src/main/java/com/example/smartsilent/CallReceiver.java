@@ -63,10 +63,10 @@ public class CallReceiver extends BroadcastReceiver {
 
        // Toast.makeText(context, "Name " + names , Toast.LENGTH_SHORT).show();
 
-        // Put caller to mute by default
+        // unsilence phone
         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-
+        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
 
         // database query helper
         DatabaseQuery query;

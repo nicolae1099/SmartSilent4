@@ -14,11 +14,12 @@ ContactsDatabaseHelper  extends SQLiteOpenHelper {
     public ContactsDatabaseHelper(Context context, String profile_name) {
         super(new DatabaseContext(context, profile_name), DATABASE_NAME, null, VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create table " + ContactsDatabase.NAME + "(" +
                 " _id integer primary key autoincrement, " +
-                ContactsDatabase.Cols.CONTACT_NAME + ", " +
+                ContactsDatabase.Cols.CONTACT_NAME + " unique," +
                 ContactsDatabase.Cols.PHONE_NUMBER +
                 ")");
     }
