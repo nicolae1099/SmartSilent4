@@ -26,6 +26,8 @@ import java.io.IOException;
 
 public class CallReceiver extends BroadcastReceiver {
 
+    AudioManager mAudioManager;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -36,10 +38,9 @@ public class CallReceiver extends BroadcastReceiver {
 
         Bundle bundle = intent.getExtras();
         String phone_number = bundle.getString("incoming_number");
-      //  System.out.println("Phone number is: " + phone_number);
 
         String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
-        // String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+
         int state = 0;
         if(stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)){
             state = TelephonyManager.CALL_STATE_IDLE;
@@ -54,44 +55,20 @@ public class CallReceiver extends BroadcastReceiver {
             return;
         }
 
-      //  Toast.makeText(context, "Phone Number " + phone_number , Toast.LENGTH_SHORT).show();
 
-        String incomingnumber= bundle.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+        String incoming_number= bundle.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
         String msg = "";
 
-        String names = getContactDisplayNameByNumber(incomingnumber,context);
-
-       // Toast.makeText(context, "Name " + names , Toast.LENGTH_SHORT).show();
+        String contact_name = getContactDisplayNameByNumber(incoming_number,context);
 
         // unsilence phone
-        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
+        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0);
 
-        // database query helper
-        DatabaseQuery query;
+        checkTimeInterval(context);
 
-        SQLiteDatabase database;
-
-        String dirPath = context.getFilesDir() + "/profiles";
-        String filePath = dirPath + "/profile_name";
-        File profile  = new File(filePath);
-
-
-        FileReader fr = null;
-
-        // get corresponding database
-        database = new ContactsDatabaseHelper(context, "/profile_name").getWritableDatabase();
-
-        query = new DatabaseQuery(database);
-
-        // search phone number in database
-        if(query.getContact(names) != null) {
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            audioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
-
-            database.close();
-        }
+        checkContactName(context, contact_name);
 
     }
 
@@ -117,6 +94,37 @@ public class CallReceiver extends BroadcastReceiver {
         }
 
         return name;
+    }
+
+    public boolean checkTimeInterval(Context context) {
+        return true;
+    }
+
+    public void checkContactName(Context context, String name) {
+        // database query helper
+        DatabaseQuery query;
+
+        SQLiteDatabase database;
+
+        String dirPath = context.getFilesDir() + "/profiles";
+        String filePath = dirPath + "/profile_name";
+        File profile  = new File(filePath);
+
+
+        FileReader fr = null;
+
+        // get corresponding database
+        database = new ContactsDatabaseHelper(context, "/profile_name").getWritableDatabase();
+
+        query = new DatabaseQuery(database);
+
+        // search phone number in database
+        if(query.getContact(name) != null) {
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            mAudioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
+
+            database.close();
+        }
     }
 }
 
