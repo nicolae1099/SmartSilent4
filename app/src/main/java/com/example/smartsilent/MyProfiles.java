@@ -1,10 +1,6 @@
 package com.example.smartsilent;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -13,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.Arrays;
+/**Momentan nici asta nu face nimic. Aici o sa schimbam si vom afisa eventual contactele puse pe silent,
+ * intervalele orare si locatiile. Si sa adaugam posibilitatea de a si sterge. */
 
 public class MyProfiles extends AppCompatActivity{
 

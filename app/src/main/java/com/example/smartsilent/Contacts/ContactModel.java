@@ -1,11 +1,11 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
-public class Model {
+public class ContactModel {
 
     private String name, phone_number;
-    private boolean isChecked = false;
+    private int isChecked = -1;
 
-    public Model(String title, String phoneNumber) {
+    public ContactModel(String title, String phoneNumber) {
         this.name = title;
         this.phone_number = phoneNumber;
     }
@@ -27,14 +27,18 @@ public class Model {
     }
 
     public void check() {
-        isChecked = true;
+        isChecked = 1;
+    }
+
+    public void resetCheck() {
+        isChecked = -1;
     }
 
     public void uncheck() {
-        isChecked = false;
+        isChecked = 0;
     }
 
-    public boolean getCheck() {
+    public int getCheck() {
         return isChecked;
     }
 }

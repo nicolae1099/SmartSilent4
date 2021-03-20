@@ -4,6 +4,7 @@ package com.example.smartsilent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,8 +17,13 @@ public class Profile implements Parcelable {
     private List<String> mContactsNames;
     private List<String> mContactsNumbers;
 
-    protected Profile() {
+    // TODO: aici sa punem datele pentru time_zone
+    private List<String> days;
+    private List<String> time_intervals;
 
+    public Profile() {
+        mContactsNames = new ArrayList<>();
+        mContactsNumbers = new ArrayList<>();
     }
 
     protected Profile(Parcel in) {
