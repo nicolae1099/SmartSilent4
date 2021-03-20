@@ -30,13 +30,13 @@ public class CallReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        MyPhoneStateListener customPhoneListener = new MyPhoneStateListener();
+        PhoneStateListener customPhoneListener = new PhoneStateListener();
 
         telephony.listen(customPhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         Bundle bundle = intent.getExtras();
         String phone_number = bundle.getString("incoming_number");
-        System.out.println("phone number isssssss " + phone_number);
+        System.out.println("Phone number is: " + phone_number);
 
         String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
         // String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
@@ -103,8 +103,6 @@ public class CallReceiver extends BroadcastReceiver {
                 }
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

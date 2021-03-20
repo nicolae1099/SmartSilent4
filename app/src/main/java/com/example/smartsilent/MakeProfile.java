@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -36,10 +37,10 @@ import java.util.ArrayList;
  */
 public class MakeProfile extends AppCompatActivity {
 
-    Button locationButton;
-    Button contactsButton;
-    Button timezoneButton;
-    Button saveProfileButton;
+    private Button locationButton;
+    private Button contactsButton;
+    private Button timezoneButton;
+    private Button saveProfileButton;
 
     private Profile mProfile;
     private Context mContext;
@@ -58,14 +59,14 @@ public class MakeProfile extends AppCompatActivity {
         mContext = getApplicationContext();
 
         Bundle b = this.getIntent().getExtras();
-        final String previous_activity = b.getString("activity");
+        final String previous_activity = "main";
 
         // if the previous activity was the MainActivity, create a new Profile Object
         if(previous_activity.compareTo("main") == 0) {
             mProfile = new Profile(new ArrayList<String>(), new ArrayList<String>());
         }
 
-        final String profile_name = b.getString("profile_name");
+        final String profile_name = "profile_name";
 
         // get profile name that the user chose and send it to next activity
         File profileDirName = new File(mContext.getFilesDir() + "/profiles/" , profile_name);
@@ -91,9 +92,10 @@ public class MakeProfile extends AppCompatActivity {
         contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MakeProfile.this, MakeContacts.class);
-                intent.putExtras(profile);
+                Intent intent = new Intent(MakeProfile.this, DisplayContacts.class);
                 startActivityForResult(intent, MAKE_CONTACTS);
+
+
             }
         });
 
@@ -124,7 +126,7 @@ public class MakeProfile extends AppCompatActivity {
                     // add in database
                     for(int i = 0; i < contactsNames.size(); i++) {
                         if(query.getContact(contactsNames.get(i)) == null) {
-                            ContentValues values = query.getContentValues(contactsNames.get(i), contactsNumbers.get(i));
+                            ContentValues values = DatabaseQuery.getContentValues(contactsNames.get(i), contactsNumbers.get(i));
                             mDatabase.insertWithOnConflict(ContactsDatabase.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                         }
                     }
@@ -145,9 +147,6 @@ public class MakeProfile extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
-
                 }
                 startActivity(intent);
             }
@@ -163,7 +162,7 @@ public class MakeProfile extends AppCompatActivity {
         switch (reqCode) {
             case (MAKE_CONTACTS):
                 if (resultCode == Activity.RESULT_OK) {
-                    Profile contactsInfo = data.getParcelableExtra("profile");
+                    Profile contactsInfo = data.getParcelableExtra("contacts");
                     ArrayList<String> contactsName = (ArrayList<String>) contactsInfo.getContactsNames();
                     ArrayList<String> contactsNumber = (ArrayList<String>) contactsInfo.getContactsNumbers();
 

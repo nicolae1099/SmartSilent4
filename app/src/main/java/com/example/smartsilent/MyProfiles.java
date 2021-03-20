@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.Arrays;
 
-public class MyProfiles extends AppCompatActivity implements MyAdapter.ItemClickListener{
+public class MyProfiles extends AppCompatActivity{
 
     private MyAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -44,10 +44,5 @@ public class MyProfiles extends AppCompatActivity implements MyAdapter.ItemClick
                 DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + mAdapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 }
