@@ -17,9 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartsilent.Contacts.ContactsDatabase;
 import com.example.smartsilent.Contacts.ContactsDatabaseHelper;
+import com.example.smartsilent.Contacts.ContactsDatabaseQuery;
 import com.example.smartsilent.Contacts.DisplayContacts;
 import com.example.smartsilent.Location.MapsActivity;
 import com.example.smartsilent.TimeZone.MakeTimeZone;
+import com.example.smartsilent.TimeZone.TimeZoneDatabase;
+import com.example.smartsilent.TimeZone.TimeZoneDatabaseHelper;
+import com.example.smartsilent.TimeZone.TimeZoneDatabaseQuery;
 
 import java.util.ArrayList;
 
@@ -59,7 +63,7 @@ public class MakeProfile extends AppCompatActivity {
 
         // if the previous activity was the MainActivity, create a new Profile Object
         if(mPreviousActivity.compareTo("main") == 0) {
-            mProfile = new Profile(new ArrayList<String>(), new ArrayList<String>());
+            mProfile = new Profile();
         }
 
         mProfileName = "profile_name";
@@ -111,6 +115,17 @@ public class MakeProfile extends AppCompatActivity {
                     Log.e("Scriu", "Incerc");
                     putContacts();
 
+                    ArrayList<String> hours = (ArrayList<String> ) mProfile.getTime_intervals();
+                    hours.add("8:30-10:00,19:00-20:00");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("8:30-10:00");
+                    hours.add("8:30-10:00,12:30-13:00,16:00-20:00");
+
+                    putTimeZone();
+
                 } else if(mPreviousActivity.compareTo("time_zone") == 0) {
                     putTimeZone();
 
@@ -132,6 +147,7 @@ public class MakeProfile extends AppCompatActivity {
         switch (reqCode) {
             case (MAKE_CONTACTS):
                 if (resultCode == Activity.RESULT_OK) {
+
                     Profile contactsInfo = data.getParcelableExtra("contacts");
                     ArrayList<String> contactsName = (ArrayList<String>) contactsInfo.getContactsNames();
                     ArrayList<String> contactsNumber = (ArrayList<String>) contactsInfo.getContactsNumbers();
@@ -142,6 +158,20 @@ public class MakeProfile extends AppCompatActivity {
                     Log.e("Size", "Size is: " + contactsName.size());
 
                     mPreviousActivity = "contacts";
+
+
+                   /* /**Date mockate pentru baza de date*/
+                   /* mPreviousActivity = "time_zone";
+
+
+                    ArrayList<String> hours = (ArrayList<String> ) mProfile.getTime_intervals();
+                    hours.add("8:30-10:00,12:30-16:00,16:00-20:00");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("8:30-10:00,12:30-15:00,16:00-20:00");*/
 
                 }
                 break;
@@ -161,6 +191,11 @@ public class MakeProfile extends AppCompatActivity {
 
                     mPreviousActivity = "time_zone";
                     */
+
+
+
+                    //mProfile.setTime_intervals(hours);
+
                 }
                 break;
             case (MAKE_LOCATIONS):
@@ -170,7 +205,6 @@ public class MakeProfile extends AppCompatActivity {
 
 
     public void putContacts(){
-        Log.e("Scriu", "scriu");
         // create database
         mDatabase = new ContactsDatabaseHelper(getApplicationContext(), mProfileName).getWritableDatabase();
 
@@ -178,19 +212,32 @@ public class MakeProfile extends AppCompatActivity {
         ArrayList<String> contactsNames = (ArrayList<String> )mProfile.getContactsNames();
         ArrayList<String> contactsNumbers = (ArrayList<String> )mProfile.getContactsNumbers();
 
-        DatabaseQuery query = new DatabaseQuery(mDatabase);
+        ContactsDatabaseQuery query = new ContactsDatabaseQuery(mDatabase);
         // add in database
-        for(int i = 0; i < contactsNames.size(); i++) {
-            if(query.getContact(contactsNames.get(i)) == null) {
-                ContentValues values = DatabaseQuery.getContentValues(contactsNames.get(i), contactsNumbers.get(i));
-                mDatabase.insertWithOnConflict(ContactsDatabase.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-            }
+        for (int i = 0; i < contactsNames.size(); i++) {
+                ContentValues values = ContactsDatabaseQuery.getContentValues(contactsNames.get(i), contactsNumbers.get(i));
+                mDatabase.replace(ContactsDatabase.NAME, null, values);
         }
 
         mDatabase.close();
     }
     public void putTimeZone() {
+        // create database
+        mDatabase = new TimeZoneDatabaseHelper(getApplicationContext(), mProfileName).getWritableDatabase();
 
+        ArrayList<String> days = (ArrayList<String>) mProfile.getDays();
+        ArrayList<String> hours = (ArrayList<String>) mProfile.getTime_intervals();
+
+        TimeZoneDatabaseQuery query = new TimeZoneDatabaseQuery(mDatabase);
+
+        // add in database
+        for(int i = 0; i < hours.size(); i++) {
+            ContentValues values = TimeZoneDatabaseQuery.getContentValues(days.get(i), hours.get(i));
+            mDatabase.replace(TimeZoneDatabase.NAME, null, values);
+        }
+
+        // close database
+        mDatabase.close();
     }
     public void putLocations(){}
 

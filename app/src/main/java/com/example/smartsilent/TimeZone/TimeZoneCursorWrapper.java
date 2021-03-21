@@ -11,7 +11,7 @@ import android.util.Pair;
  * */
 
 public class TimeZoneCursorWrapper extends CursorWrapper {
-    TimeZoneCursorWrapper(Cursor cursor) {
+    public TimeZoneCursorWrapper(Cursor cursor) {
         super(cursor);
     }
 

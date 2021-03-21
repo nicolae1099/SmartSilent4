@@ -19,7 +19,7 @@ public class TimeZoneDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("create table " + TimeZoneDatabase.NAME + "(" +
                 " _id integer primary key autoincrement, " +
-                TimeZoneDatabase.Cols.DAYS + ", " +
+                TimeZoneDatabase.Cols.DAYS + " unique, " +
                 TimeZoneDatabase.Cols.HOURS +
                 ")");
     }

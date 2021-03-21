@@ -1,4 +1,4 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
  * This class will contain methods to query all the databases: contacts,
  * timezones and locations
  */
-public class DatabaseQuery {
+public class ContactsDatabaseQuery {
 
     private SQLiteDatabase  mDatabase;
 
-    public DatabaseQuery(SQLiteDatabase  mDatabase) {
+    public ContactsDatabaseQuery(SQLiteDatabase  mDatabase) {
         this.mDatabase = mDatabase;
     }
 

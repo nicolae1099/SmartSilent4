@@ -17,6 +17,22 @@ public class Profile implements Parcelable {
     private List<String> mContactsNames;
     private List<String> mContactsNumbers;
 
+    public List<String> getDays() {
+        return days;
+    }
+
+    public void setDays(List<String> days) {
+        this.days = days;
+    }
+
+    public List<String> getTime_intervals() {
+        return time_intervals;
+    }
+
+    public void setTime_intervals(List<String> time_intervals) {
+        this.time_intervals = time_intervals;
+    }
+
     // TODO: aici sa punem datele pentru time_zone
     private List<String> days;
     private List<String> time_intervals;
@@ -24,6 +40,16 @@ public class Profile implements Parcelable {
     public Profile() {
         mContactsNames = new ArrayList<>();
         mContactsNumbers = new ArrayList<>();
+        time_intervals = new ArrayList<>();
+
+        days = new ArrayList<>();
+        days.add("Sunday");
+        days.add("Tuesday");
+        days.add("Wednesday");
+        days.add("Thursday");
+        days.add("Friday");
+        days.add("Saturday");
+        days.add("Monday");
     }
 
     protected Profile(Parcel in) {
