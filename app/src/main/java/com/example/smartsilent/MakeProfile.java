@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Pair;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,16 +15,16 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartsilent.Contacts.ContactsCursorWrapper;
 import com.example.smartsilent.Contacts.ContactsDatabase;
 import com.example.smartsilent.Contacts.ContactsDatabaseHelper;
-import com.example.smartsilent.Contacts.MakeContacts;
+import com.example.smartsilent.Contacts.ContactsDatabaseQuery;
+import com.example.smartsilent.Contacts.DisplayContacts;
 import com.example.smartsilent.Location.MapsActivity;
 import com.example.smartsilent.TimeZone.MakeTimeZone;
+import com.example.smartsilent.TimeZone.TimeZoneDatabase;
+import com.example.smartsilent.TimeZone.TimeZoneDatabaseHelper;
+import com.example.smartsilent.TimeZone.TimeZoneDatabaseQuery;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -50,6 +48,9 @@ public class MakeProfile extends AppCompatActivity {
     final private int MAKE_TIMEZONE = 2;
     final private int MAKE_LOCATIONS = 3;
 
+    private String mProfileName;
+    private String mPreviousActivity;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,19 +59,14 @@ public class MakeProfile extends AppCompatActivity {
 
         mContext = getApplicationContext();
 
-        Bundle b = this.getIntent().getExtras();
-        final String previous_activity = "main";
+        mPreviousActivity = this.getIntent().getStringExtra("activity");
 
         // if the previous activity was the MainActivity, create a new Profile Object
-        if(previous_activity.compareTo("main") == 0) {
-            mProfile = new Profile(new ArrayList<String>(), new ArrayList<String>());
+        if(mPreviousActivity.compareTo("main") == 0) {
+            mProfile = new Profile();
         }
 
-        final String profile_name = "profile_name";
-
-        // get profile name that the user chose and send it to next activity
-        File profileDirName = new File(mContext.getFilesDir() + "/profiles/" , profile_name);
-        profileDirName.mkdir();
+        mProfileName = "profile_name";
 
         /* pass to the next activity the name of the current activity and
         the current Profile */
@@ -114,40 +110,29 @@ public class MakeProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MakeProfile.this, MainActivity.class);
-                if(previous_activity != "main") {
-                    // create database
-                   mDatabase = new ContactsDatabaseHelper(getApplicationContext(), profile_name).getWritableDatabase();
+                Log.e("Scriu", "Dece " + mPreviousActivity);
+                if(mPreviousActivity.compareTo("contacts") == 0) {
+                    Log.e("Scriu", "Incerc");
+                    putContacts();
 
-                   // retrieve contact info
-                    ArrayList<String> contactsNames = (ArrayList<String> )mProfile.getContactsNames();
-                    ArrayList<String> contactsNumbers = (ArrayList<String> )mProfile.getContactsNumbers();
+                   /* ArrayList<String> hours = (ArrayList<String> ) mProfile.getTime_intervals();
+                    hours.add("8:30-10:00,19:00-20:00");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("8:30-10:00");
+                    hours.add("8:30-10:00,12:30-13:00,16:00-20:00");
 
-                    DatabaseQuery query = new DatabaseQuery(mDatabase);
-                    // add in database
-                    for(int i = 0; i < contactsNames.size(); i++) {
-                        if(query.getContact(contactsNames.get(i)) == null) {
-                            ContentValues values = DatabaseQuery.getContentValues(contactsNames.get(i), contactsNumbers.get(i));
-                            mDatabase.insertWithOnConflict(ContactsDatabase.NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-                        }
-                    }
+                    putTimeZone();*/
 
-                    mDatabase.close();
+                } else if(mPreviousActivity.compareTo("time_zone") == 0) {
+                    putTimeZone();
 
-                    File active = new File(getApplicationContext().getFilesDir() , "profiles");
-                    File mimi = new File (active, "active_profiles");
-                    FileWriter myWriter = null;
-                    try {
-                        myWriter = new FileWriter(mimi);
-                        try {
-                            myWriter.write(profile_name);
-                            myWriter.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                } else if(mPreviousActivity.compareTo("locations") == 0) {
+                    putLocations();
                 }
+
                 startActivity(intent);
             }
         });
@@ -156,12 +141,13 @@ public class MakeProfile extends AppCompatActivity {
     /** This method retrieves the returned value of the previous finished activity.
      * @param data contains a Profile object, customized by the user in one of the
      *             customisation activities: contacts, timezone or locations
-    */
+     */
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         switch (reqCode) {
             case (MAKE_CONTACTS):
                 if (resultCode == Activity.RESULT_OK) {
+
                     Profile contactsInfo = data.getParcelableExtra("contacts");
                     ArrayList<String> contactsName = (ArrayList<String>) contactsInfo.getContactsNames();
                     ArrayList<String> contactsNumber = (ArrayList<String>) contactsInfo.getContactsNumbers();
@@ -169,9 +155,41 @@ public class MakeProfile extends AppCompatActivity {
                     mProfile.setContactsNames(contactsName);
                     mProfile.setContactsNumbers(contactsNumber);
 
+                    Log.e("Size", "Size is: " + contactsName.size());
+
+                    mPreviousActivity = "contacts";
+
+
+                   /* /**Date mockate pentru baza de date*/
+                   /* mPreviousActivity = "time_zone";
+
+
+                    ArrayList<String> hours = (ArrayList<String> ) mProfile.getTime_intervals();
+                    hours.add("8:30-10:00,12:30-16:00,16:00-20:00");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("");
+                    hours.add("8:30-10:00,12:30-15:00,16:00-20:00");*/
+
                 }
                 break;
             case (MAKE_TIMEZONE):
+                if (resultCode == Activity.RESULT_OK) {
+
+                    /**Nota: Nu sterge. Este model pentru ce am putea intoarce din activitate.
+                     * Spre ex:
+                     * @hours: Array with time_intervals for each day: hours[0] - 8:30-10:00,12:30-14:00,16:00-20:00*/
+
+
+                    ArrayList<String> hours =  data.getStringArrayListExtra("time_zone");
+
+                    mProfile.setTime_intervals(hours);
+
+                    mPreviousActivity = "time_zone";
+
+                }
                 break;
             case (MAKE_LOCATIONS):
                 break;
@@ -179,6 +197,41 @@ public class MakeProfile extends AppCompatActivity {
     }
 
 
+    public void putContacts(){
+        // create database
+        mDatabase = new ContactsDatabaseHelper(getApplicationContext(), mProfileName).getWritableDatabase();
 
+        // retrieve contact info
+        ArrayList<String> contactsNames = (ArrayList<String> )mProfile.getContactsNames();
+        ArrayList<String> contactsNumbers = (ArrayList<String> )mProfile.getContactsNumbers();
+
+        ContactsDatabaseQuery query = new ContactsDatabaseQuery(mDatabase);
+        // add in database
+        for (int i = 0; i < contactsNames.size(); i++) {
+                ContentValues values = ContactsDatabaseQuery.getContentValues(contactsNames.get(i), contactsNumbers.get(i));
+                mDatabase.replace(ContactsDatabase.NAME, null, values);
+        }
+
+        mDatabase.close();
+    }
+    public void putTimeZone() {
+        // create database
+        mDatabase = new TimeZoneDatabaseHelper(getApplicationContext(), mProfileName).getWritableDatabase();
+
+        ArrayList<String> days = (ArrayList<String>) mProfile.getDays();
+        ArrayList<String> hours = (ArrayList<String>) mProfile.getTime_intervals();
+
+        TimeZoneDatabaseQuery query = new TimeZoneDatabaseQuery(mDatabase);
+
+        // add in database
+        for(int i = 0; i < hours.size(); i++) {
+            ContentValues values = TimeZoneDatabaseQuery.getContentValues(days.get(i), hours.get(i));
+            mDatabase.replace(TimeZoneDatabase.NAME, null, values);
+        }
+
+        // close database
+        mDatabase.close();
+    }
+    public void putLocations(){}
 
 }

@@ -1,4 +1,4 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
@@ -19,6 +19,8 @@ import android.widget.SimpleCursorAdapter;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
+import com.example.smartsilent.R;
 
 public class ContactsFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>,

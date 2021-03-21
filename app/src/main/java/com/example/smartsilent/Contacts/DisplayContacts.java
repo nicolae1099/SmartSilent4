@@ -1,4 +1,4 @@
-package com.example.smartsilent;
+package com.example.smartsilent.Contacts;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartsilent.Profile;
+import com.example.smartsilent.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +29,7 @@ public class DisplayContacts extends AppCompatActivity {
     private TextView cancel_selection;
     private RecyclerView mRecyclerView;
     private MyContactsAdapter myAdapter;
-    private ArrayList<Model> models = new ArrayList<>();
+    private ArrayList<ContactModel> models = new ArrayList<>();
     private Profile contacts = new Profile();
 
     @Override
@@ -39,8 +42,8 @@ public class DisplayContacts extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                for(Model model : models) {
-                    if(!(model.getCheck())) {
+                for(ContactModel model : models) {
+                    if((model.getCheck() == 1)) {
                         contacts.addContactName(model.getName());
                         contacts.addContactNumber(model.getPhone_number());
                     }
@@ -126,7 +129,7 @@ public class DisplayContacts extends AppCompatActivity {
             if (contactPhones != null) {
                 for (String phone :
                         contactPhones) {
-                    models.add(new Model(name, phone));
+                    models.add(new ContactModel(name, phone));
                 }
             }
         }

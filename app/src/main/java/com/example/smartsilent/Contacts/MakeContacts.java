@@ -26,7 +26,7 @@ import com.example.smartsilent.R;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/** Sincer cred ca ii dam delete, nu mai avem nevoie de ea, am scris eu in alte clase */
 public class MakeContacts extends AppCompatActivity {
     Button btnview, listview;
     TextView txtname,txtphno;
