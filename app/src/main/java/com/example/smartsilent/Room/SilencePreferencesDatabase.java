@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Contact.class}, version = 1)
+@Database(entities = {Contact.class}, version = 1, exportSchema = false)
 public abstract class SilencePreferencesDatabase extends RoomDatabase {
 
     private static SilencePreferencesDatabase instance;
