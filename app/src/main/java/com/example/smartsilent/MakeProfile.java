@@ -115,7 +115,7 @@ public class MakeProfile extends AppCompatActivity {
                     Log.e("Scriu", "Incerc");
                     putContacts();
 
-                    ArrayList<String> hours = (ArrayList<String> ) mProfile.getTime_intervals();
+                   /* ArrayList<String> hours = (ArrayList<String> ) mProfile.getTime_intervals();
                     hours.add("8:30-10:00,19:00-20:00");
                     hours.add("");
                     hours.add("");
@@ -124,7 +124,7 @@ public class MakeProfile extends AppCompatActivity {
                     hours.add("8:30-10:00");
                     hours.add("8:30-10:00,12:30-13:00,16:00-20:00");
 
-                    putTimeZone();
+                    putTimeZone();*/
 
                 } else if(mPreviousActivity.compareTo("time_zone") == 0) {
                     putTimeZone();
@@ -177,24 +177,17 @@ public class MakeProfile extends AppCompatActivity {
                 break;
             case (MAKE_TIMEZONE):
                 if (resultCode == Activity.RESULT_OK) {
+
                     /**Nota: Nu sterge. Este model pentru ce am putea intoarce din activitate.
                      * Spre ex:
-                     * @days: Array with days: Monday, Tuesday, ... , Sunday
                      * @hours: Array with time_intervals for each day: hours[0] - 8:30-10:00,12:30-14:00,16:00-20:00*/
-                    /*
-                    Profile time_intervals = data.getParcelableExtra("time_zone");
-                    ArrayList<String> days = (ArrayList<String>) time_intervals.getContactsNames();
-                    ArrayList<String> hours = (ArrayList<String>) time_intervals.getContactsNumbers();
 
-                    mProfile.setContactsNames(days);
-                    mProfile.setContactsNumbers(hours);
+
+                    ArrayList<String> hours =  data.getStringArrayListExtra("time_zone");
+
+                    mProfile.setTime_intervals(hours);
 
                     mPreviousActivity = "time_zone";
-                    */
-
-
-
-                    //mProfile.setTime_intervals(hours);
 
                 }
                 break;
