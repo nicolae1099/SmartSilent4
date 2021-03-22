@@ -37,8 +37,6 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
         return new MyHolder(view);
     }
 
-
-
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         holder.mName.setText(models.get(position).getName());
@@ -70,27 +68,18 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
                 } else {
                     models.get(i).check();
                 }
-
             }
         }
-
         notifyDataSetChanged();
     }
 
     public class MyHolder extends RecyclerView.ViewHolder  {
-
-        ImageView mImageView;
         CheckBox checkBox;
         TextView mName, mPhoneNumber;
-
-        boolean selectedAll = false;
-        boolean unselectedAll = false;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
 
-
-            this.mImageView = itemView.findViewById(R.id.image_view);
             this.mName = itemView.findViewById(R.id.name_view);
             this.mPhoneNumber = itemView.findViewById(R.id.phone_number_view);
             checkBox = itemView.findViewById(R.id.checkBox);
@@ -112,10 +101,8 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
                         models.get(adapterPosition).uncheck();
 
                     }
-
                 }
             });
-
         }
 
         void bind(int position) {
@@ -129,8 +116,6 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
                 models.get(position).check();
                 checkBox.setChecked(true);
             }
-
-
         }
 
     }

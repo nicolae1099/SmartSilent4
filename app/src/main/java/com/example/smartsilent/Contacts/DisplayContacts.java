@@ -52,7 +52,6 @@ public class DisplayContacts extends AppCompatActivity {
             inDB.put(contacts.getContactsName().get(i), true);
         }
 
-
         confirm_selection = findViewById(R.id.button_confirm);
         confirm_selection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +70,7 @@ public class DisplayContacts extends AppCompatActivity {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("selected_contacts", selected_contacts);
                 returnIntent.putExtra("unselected_contacts", unselected_contacts);
-                setResult(Activity.RESULT_OK,returnIntent);
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -130,6 +129,7 @@ public class DisplayContacts extends AppCompatActivity {
                     list = new ArrayList<>();
                     phones.put(contactId, list);
                 }
+
                 list.add(phone);
             }
             getContactsCursor.close();

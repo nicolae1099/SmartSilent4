@@ -33,7 +33,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    AudioManager audioManager;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     private Button locationButton;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mProfile = Profile.getInstance(this.getApplicationContext());
-
 
         locationButton = findViewById(R.id.add_location_button);
         locationButton.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
                     mProfile.getTimeZone().setData(in.getData());
 
                     mProfile.updateTimeZoneDatabase();
-
                 }
                 break;
             case (MAKE_LOCATIONS):

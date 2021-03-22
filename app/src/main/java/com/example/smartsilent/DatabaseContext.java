@@ -24,20 +24,17 @@ public class DatabaseContext extends ContextWrapper {
     {
         String dbfile = super.getBaseContext().getFilesDir() + File.separator +
                 "profiles" + File.separator + profile_name + File.separator + name;
-        if (!dbfile.endsWith(".db"))
-        {
+        if (!dbfile.endsWith(".db")) {
             dbfile += ".db" ;
         }
 
         File result = new File(dbfile);
 
-        if (!result.getParentFile().exists())
-        {
+        if (!result.getParentFile().exists()) {
             result.getParentFile().mkdirs();
         }
 
-        if (Log.isLoggable(DEBUG_CONTEXT, Log.WARN))
-        {
+        if (Log.isLoggable(DEBUG_CONTEXT, Log.WARN)) {
             Log.w(DEBUG_CONTEXT,
                     "getDatabasePath(" + name + ") = " + result.getAbsolutePath());
         }
@@ -56,7 +53,6 @@ public class DatabaseContext extends ContextWrapper {
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory)
     {
         SQLiteDatabase result = SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name), null);
-        // SQLiteDatabase result = super.openOrCreateDatabase(name, mode, factory);
         if (Log.isLoggable(DEBUG_CONTEXT, Log.WARN))
         {
             Log.w(DEBUG_CONTEXT,

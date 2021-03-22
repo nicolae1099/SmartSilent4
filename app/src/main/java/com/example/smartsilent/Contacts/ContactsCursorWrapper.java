@@ -12,7 +12,7 @@ public class ContactsCursorWrapper extends CursorWrapper {
             String contactNameString = getString(getColumnIndex(ContactsDatabase.Cols.CONTACT_NAME));
             String contactPhoneString = getString(getColumnIndex(ContactsDatabase.Cols.PHONE_NUMBER));
 
-            return new Pair<String, String> (contactNameString, contactPhoneString);
+            return new Pair<>(contactNameString, contactPhoneString);
         }
     }
 
