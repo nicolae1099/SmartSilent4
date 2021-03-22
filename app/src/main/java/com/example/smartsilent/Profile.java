@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.util.Pair;
 
 import com.example.smartsilent.Contacts.ContactsData;
@@ -82,8 +83,10 @@ public class Profile implements Parcelable {
             String[] selected_hours = time_zones.second.get(i).split(",");
 
             for (String selectedHour : selected_hours) {
-                int selected_hour = Integer.parseInt(selectedHour);
-                day_hours[selected_hour] = true;
+                if (selectedHour.compareTo("") != 0) {
+                    int selected_hour = Integer.parseInt(selectedHour);
+                    day_hours[selected_hour] = true;
+                }
             }
 
             timeZoneData.getData().add(day_hours);
@@ -154,12 +157,14 @@ public class Profile implements Parcelable {
         // create database
         mTimeZoneDatabase = new TimeZoneDatabaseHelper(context, "profile_name").getWritableDatabase();
 
-        ArrayList<String> days = TimeZoneData.getDays();
+        ArrayList<String> days = timeZoneData.getDays();
         ArrayList<boolean[]> hours = timeZoneData.getData();
 
         ArrayList<String> hours_per_day = new ArrayList<>();
         for(int i = 0; i < TimeZoneData.NUM_DAYS; i++) {
             StringBuilder sb = new StringBuilder();
+
+            hours_per_day.add("");
 
             for(int j = 0; j < TimeZoneData.NUM_HOURS; j++) {
                 if(hours.get(i)[j]) {
@@ -170,11 +175,13 @@ public class Profile implements Parcelable {
                 }
             }
 
-            hours_per_day.add(sb.toString());
+            hours_per_day.set(i, sb.toString());
         }
 
         // add in database
+        Log.e("TAG", " " + hours_per_day.size());
         for(int i = 0; i < hours_per_day.size(); i++) {
+            //Log.e("TAG", " " + days.size());
             ContentValues values = TimeZoneDatabaseQuery.getContentValues(days.get(i), hours_per_day.get(i));
             mTimeZoneDatabase.replace(TimeZoneDatabase.NAME, null, values);
         }

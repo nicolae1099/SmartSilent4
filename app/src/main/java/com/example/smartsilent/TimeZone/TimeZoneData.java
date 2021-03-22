@@ -10,7 +10,7 @@ public class TimeZoneData implements Parcelable {
 
 
     ArrayList<boolean[]> data;
-    private static ArrayList<String> days;
+    private ArrayList<String> days;
 
     public static final int NUM_DAYS = 7;
     public static final int NUM_HOURS = 24;
@@ -18,6 +18,9 @@ public class TimeZoneData implements Parcelable {
     public TimeZoneData() {
         data = new ArrayList<>();
 
+        for (int i = 0; i < NUM_DAYS; i++) {
+            data.add(new boolean[NUM_HOURS]);
+        }
         days = new ArrayList<>();
         days.add("Sunday");
         days.add("Tuesday");
@@ -29,13 +32,29 @@ public class TimeZoneData implements Parcelable {
 
     }
     public TimeZoneData(Parcel in) {
+        data = new ArrayList<>();
+
+        for (int i = 0; i < NUM_DAYS; i++) {
+            data.add(new boolean[NUM_HOURS]);
+        }
+
+        days = new ArrayList<>();
+        days.add("Sunday");
+        days.add("Tuesday");
+        days.add("Wednesday");
+        days.add("Thursday");
+        days.add("Friday");
+        days.add("Saturday");
+        days.add("Monday");
+
+
         for(int i = 0; i < NUM_DAYS; i++) {
             in.readBooleanArray(data.get(i));
         }
         in.readStringList(days);
     }
 
-    public static ArrayList<String> getDays() {
+    public ArrayList<String> getDays() {
         return days;
     }
 

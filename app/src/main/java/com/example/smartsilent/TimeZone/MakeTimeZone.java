@@ -55,7 +55,7 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
             buttons.add(button);
         }
 
-        TimeZoneData data = this.getIntent().getParcelableExtra("time_zone");
+        data = this.getIntent().getParcelableExtra("time_zone");
 
     }
 
