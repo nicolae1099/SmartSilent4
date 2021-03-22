@@ -120,45 +120,15 @@ public class CallReceiver extends BroadcastReceiver {
         database = new TimeZoneDatabaseHelper(context, "/profile_name").getWritableDatabase();
         query = new TimeZoneDatabaseQuery(database);
 
-
         // search day in database
         if(query.getTimeZone(day) != null) {
-            String time_interval = query.getTimeZone(day).second;
-
-            String[] hours_intervals = time_interval.split(",");
-            for (int i = 0; i < hours_intervals.length; i++) {
-                String[] hours = hours_intervals[i].split("-");
-
-                int lower_hour = 0, higher_hour = 0;
-                int lower_minutes = 0;
-                int higher_minutes = 0;
-
-                for (int j = 0; j < 2; j++) {
-                    String[] half_hours = hours[j].split(":");
-
-                    if (j == 0) {
-                        lower_hour = Integer.parseInt(half_hours[0]);
-                        if (half_hours.length == 2) {
-                            lower_minutes = Integer.parseInt(half_hours[1]);
-                        }
-                    } else {
-                        higher_hour = Integer.parseInt(half_hours[0]);
-                        if (half_hours.length == 2) {
-                            higher_minutes = Integer.parseInt(half_hours[1]);
-                        }
-                    }
-
-
-                }
-
-                if (((lower_hour < currentHourIn24Format) ||
-                        (lower_hour == currentHourIn24Format && lower_minutes <= minute)) &&
-                        ((currentHourIn24Format < higher_hour) ||
-                                (currentHourIn24Format == higher_hour) && minute <= higher_minutes)) {
+            String[] hours = query.getTimeZone(day).second.split(",");
+            for (int i = 0; i < hours.length; i++) {
+                if(Integer.parseInt(hours[i]) == currentHourIn24Format) {
                     database.close();
                     return true;
-
                 }
+
             }
         }
 
