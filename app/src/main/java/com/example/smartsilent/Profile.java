@@ -84,7 +84,7 @@ public class Profile implements Parcelable {
 
             for (String selectedHour : selected_hours) {
                 if (selectedHour.compareTo("") != 0) {
-                    int selected_hour = Integer.parseInt(selectedHour);
+                    int selected_hour = Integer.parseInt(selectedHour) - 1;
                     day_hours[selected_hour] = true;
                 }
             }
@@ -171,7 +171,7 @@ public class Profile implements Parcelable {
                     if(sb.length() != 0) {
                         sb.append(",");
                     }
-                    sb.append(j);
+                    sb.append(j + 1);
                 }
             }
 

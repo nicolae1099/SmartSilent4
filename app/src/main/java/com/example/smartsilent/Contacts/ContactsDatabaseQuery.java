@@ -63,14 +63,22 @@ public class ContactsDatabaseQuery {
         return contacts;
     }
 
-    public Pair<String, String> getContact(String contact_name) {
+    public Pair<String, String> getContact(String contact_name, String phone_number) {
+        ContactsCursorWrapper cursor;
 
-        ContactsCursorWrapper cursor = queryContacts(
+        cursor = queryContacts(
                 ContactsDatabase.Cols.CONTACT_NAME + " = ?",
                 new String[] { contact_name.toString() }
         );
 
         try {
+            if (cursor.getCount() == 0) {
+                cursor = queryContacts(
+                        ContactsDatabase.Cols.PHONE_NUMBER+ " = ?",
+                        new String[] { phone_number.toString() }
+                );
+            }
+
             if (cursor.getCount() == 0) {
                 return null;
             }
@@ -80,5 +88,6 @@ public class ContactsDatabaseQuery {
         } finally {
             cursor.close();
         }
+
     }
 }

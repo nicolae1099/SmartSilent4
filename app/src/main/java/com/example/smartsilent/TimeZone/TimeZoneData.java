@@ -23,12 +23,13 @@ public class TimeZoneData implements Parcelable {
         }
         days = new ArrayList<>();
         days.add("Sunday");
+        days.add("Monday");
         days.add("Tuesday");
         days.add("Wednesday");
         days.add("Thursday");
         days.add("Friday");
         days.add("Saturday");
-        days.add("Monday");
+
 
     }
     public TimeZoneData(Parcel in) {

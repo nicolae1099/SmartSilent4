@@ -8,65 +8,48 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.smartsilent.Contacts.ContactsData;
-import com.example.smartsilent.Contacts.ContactsDatabase;
-import com.example.smartsilent.Contacts.ContactsDatabaseHelper;
-import com.example.smartsilent.Contacts.ContactsDatabaseQuery;
 import com.example.smartsilent.Contacts.DisplayContacts;
 import com.example.smartsilent.Location.MapsActivity;
 import com.example.smartsilent.TimeZone.MakeTimeZone;
 import com.example.smartsilent.TimeZone.TimeZoneData;
-import com.example.smartsilent.TimeZone.TimeZoneDatabaseHelper;
-import com.example.smartsilent.TimeZone.TimeZoneDatabaseQuery;
 
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-   // ImageButton addProfile;
     AudioManager audioManager;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     private Button locationButton;
     private Button contactsButton;
     private Button timezoneButton;
-    private Button saveProfileButton;
 
     private Profile mProfile;
-    private Context mContext;
-    private SQLiteDatabase mDatabase;
-
     final private int MAKE_CONTACTS = 1;
     final private int MAKE_TIMEZONE = 2;
     final private int MAKE_LOCATIONS = 3;
-
-    private String mProfileName;
-    private String mPreviousActivity;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.make_profile);
+        setContentView(R.layout.main_activity);
 
         checkAndRequestPermissions();
 
@@ -80,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             mydir.mkdir();
         }
 
-        mProfileName = "profile_name";
         mProfile = Profile.getInstance(this.getApplicationContext());
 
 
@@ -185,5 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 
 }

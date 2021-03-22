@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -29,6 +30,7 @@ import java.util.TimeZone;
 public class CallReceiver extends BroadcastReceiver {
 
     AudioManager mAudioManager;
+    String contactNumber;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -58,9 +60,11 @@ public class CallReceiver extends BroadcastReceiver {
         }
 
         String incoming_number= bundle.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+        contactNumber = incoming_number;
         String msg = "";
 
         String contact_name = getContactDisplayNameByNumber(incoming_number,context);
+
 
         // unsilence phone
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -73,6 +77,8 @@ public class CallReceiver extends BroadcastReceiver {
 
         checkContactName(context, contact_name);
     }
+
+
 
     public String getContactDisplayNameByNumber(String number,Context context) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
@@ -147,10 +153,8 @@ public class CallReceiver extends BroadcastReceiver {
 
         query = new ContactsDatabaseQuery(database);
 
-        Log.e("Nicolae", name);
         // search phone number in database
-        if(query.getContact(name) != null) {
-            Log.e("Nicolae", "nic");
+        if(query.getContact(name, contactNumber) != null) {
             mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             mAudioManager.adjustVolume(AudioManager.ADJUST_MUTE, 0);
 
