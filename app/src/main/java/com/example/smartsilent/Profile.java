@@ -1,11 +1,27 @@
 package com.example.smartsilent;
 
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Pair;
 
+import com.example.smartsilent.Contacts.ContactsData;
+import com.example.smartsilent.Contacts.ContactsDatabase;
+import com.example.smartsilent.Contacts.ContactsDatabaseHelper;
+import com.example.smartsilent.Contacts.ContactsDatabaseQuery;
+import com.example.smartsilent.Location.LocationsData;
+import com.example.smartsilent.TimeZone.TimeZoneData;
+import com.example.smartsilent.TimeZone.TimeZoneDatabase;
+import com.example.smartsilent.TimeZone.TimeZoneDatabaseHelper;
+import com.example.smartsilent.TimeZone.TimeZoneDatabaseQuery;
+
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  This class acts as a package containing all data within a user profile: contacts info,
@@ -14,53 +30,84 @@ import java.util.List;
 
 public class Profile implements Parcelable {
 
-    private List<String> mContactsNames;
-    private List<String> mContactsNumbers;
 
-    public List<String> getDays() {
-        return days;
+    private TimeZoneData timeZoneData;
+    private ContactsData contactsData;
+    private LocationsData locationsData;
+
+    private static Profile instance = null;
+    private  SQLiteDatabase mContactsDatabase = null;
+    private  SQLiteDatabase mTimeZoneDatabase = null;
+    private  SQLiteDatabase mLocationsDatabase = null;
+
+    private Context context;
+
+    private Profile(Context context) {
+        this.context = context;
+
+        timeZoneData = new TimeZoneData();
+        contactsData = new ContactsData();
+
+        read_contacts();
+        read_timezone();
+       // read_location();
+
     }
 
-    public void setDays(List<String> days) {
-        this.days = days;
+    private void read_contacts() {
+        // create database
+        mContactsDatabase = new ContactsDatabaseHelper(context, "profile_name").getWritableDatabase();
+
+        // query database
+        ContactsDatabaseQuery query = new ContactsDatabaseQuery(mContactsDatabase);
+        Pair<ArrayList<String>, ArrayList<String>> contacts_info =  query.getContacts();
+
+        contactsData.setContactsName(contacts_info.first);
+        contactsData.setPhoneNumbers(contacts_info.second);
+
+        mContactsDatabase.close();
+    }
+    private void read_timezone() {
+        // create database
+        mTimeZoneDatabase = new TimeZoneDatabaseHelper(context, "profile_name").getWritableDatabase();
+
+        // query database
+        TimeZoneDatabaseQuery query = new TimeZoneDatabaseQuery(mTimeZoneDatabase);
+        Pair<ArrayList<String>, ArrayList<String>> time_zones =  query.getTimeZones();
+
+        for(int i = 0; i < time_zones.second.size(); i++) {
+            boolean[] day_hours = new boolean[TimeZoneData.NUM_HOURS];
+
+            String[] selected_hours = time_zones.second.get(i).split(",");
+
+            for (String selectedHour : selected_hours) {
+                int selected_hour = Integer.parseInt(selectedHour);
+                day_hours[selected_hour] = true;
+            }
+
+            timeZoneData.getData().add(day_hours);
+        }
+
+        mTimeZoneDatabase.close();
+
+    }
+    private void read_location() {
+
     }
 
-    public List<String> getTime_intervals() {
-        return time_intervals;
-    }
-
-    public void setTime_intervals(List<String> time_intervals) {
-        this.time_intervals = time_intervals;
-    }
-
-    // TODO: aici sa punem datele pentru time_zone
-    private List<String> days;
-    private List<String> time_intervals;
-
-    public Profile() {
-        mContactsNames = new ArrayList<>();
-        mContactsNumbers = new ArrayList<>();
-        time_intervals = new ArrayList<>();
-
-        days = new ArrayList<>();
-        days.add("Sunday");
-        days.add("Tuesday");
-        days.add("Wednesday");
-        days.add("Thursday");
-        days.add("Friday");
-        days.add("Saturday");
-        days.add("Monday");
+    public static Profile getInstance(Context context) {
+        if(instance == null) {
+            instance = new Profile(context);
+        }
+        return instance;
     }
 
     protected Profile(Parcel in) {
-        this.mContactsNames = in.createStringArrayList();
-        this.mContactsNumbers = in.createStringArrayList();
+        in.readParcelable(TimeZoneData.class.getClassLoader());
+        in.readParcelable(ContactsData.class.getClassLoader());
+      //  in.readParcelable(LocationsData.class.getClassLoader());
     }
 
-    protected Profile(List<String> mContactsNames, List<String> mContactsNumbers) {
-        this.mContactsNames = mContactsNames;
-        this.mContactsNumbers = mContactsNumbers;
-    }
 
     public static final Creator<Profile> CREATOR = new Creator<Profile>() {
         @Override
@@ -81,32 +128,94 @@ public class Profile implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeStringList(mContactsNames);
-        parcel.writeStringList(mContactsNumbers);
+
+
+        parcel.writeParcelable(timeZoneData, 0);
+        parcel.writeParcelable(contactsData, 0);
+        //parcel.writeParcelable(locationsData, 0);
+
     }
 
-    public List<String> getContactsNames() {
-        return mContactsNames;
+    public ContactsData getContactsData() {
+        return contactsData;
     }
 
-    public void setContactsNames(List<String> mContactsNames) {
-        this.mContactsNames = mContactsNames;
+
+    public TimeZoneData getTimeZone() {
+        return timeZoneData;
     }
 
-    public List<String> getContactsNumbers() {
-        return mContactsNumbers;
+    public LocationsData getLocationsData() {
+        return locationsData;
     }
 
-    public void setContactsNumbers(List<String> mContactsNumbers) {
-        this.mContactsNumbers = mContactsNumbers;
+    public void updateTimeZoneDatabase() {
+        // create database
+        mTimeZoneDatabase = new TimeZoneDatabaseHelper(context, "profile_name").getWritableDatabase();
+
+        ArrayList<String> days = TimeZoneData.getDays();
+        ArrayList<boolean[]> hours = timeZoneData.getData();
+
+        ArrayList<String> hours_per_day = new ArrayList<>();
+        for(int i = 0; i < TimeZoneData.NUM_DAYS; i++) {
+            StringBuilder sb = new StringBuilder();
+
+            for(int j = 0; j < TimeZoneData.NUM_HOURS; j++) {
+                if(hours.get(i)[j]) {
+                    if(hours_per_day.get(i).length() != 0) {
+                        sb.append(",");
+                    }
+                    sb.append(j);
+                }
+            }
+
+            hours_per_day.add(sb.toString());
+        }
+
+        // add in database
+        for(int i = 0; i < hours_per_day.size(); i++) {
+            ContentValues values = TimeZoneDatabaseQuery.getContentValues(days.get(i), hours_per_day.get(i));
+            mTimeZoneDatabase.replace(TimeZoneDatabase.NAME, null, values);
+        }
+
+        // close database
+        mTimeZoneDatabase.close();
     }
 
-    public void addContactName(String contactName) {
-        mContactsNames.add(contactName);
+    public void updateContactsDatabase(ContactsData selected_contacts, ContactsData unselected_contacts) {
+
+        // create database
+        mContactsDatabase = new ContactsDatabaseHelper(context, "profile_name").getWritableDatabase();
+
+        // add in database
+        for (int i = 0; i < selected_contacts.getContactsName().size(); i++) {
+
+            ContentValues values = ContactsDatabaseQuery.getContentValues
+                    (selected_contacts.getContactsName().get(i), selected_contacts.getPhoneNumbers().get(i));
+            mContactsDatabase.replace(ContactsDatabase.NAME, null, values);
+        }
+
+        // remove from database
+        for(int i = 0; i < unselected_contacts.getContactsName().size(); i++) {
+            mContactsDatabase.delete(ContactsDatabase.NAME, ContactsDatabase.Cols.CONTACT_NAME + " = ?",
+                    new String[] { unselected_contacts.getContactsName().get(i).toString() });
+        }
+
+        mContactsDatabase.close();
+
+        // add in contactsData
+        for (int i = 0; i < selected_contacts.getContactsName().size(); i++) {
+            //selected_contacts
+            contactsData.getContactsName().add(selected_contacts.getContactsName().get(i));
+            contactsData.getPhoneNumbers().add(selected_contacts.getPhoneNumbers().get(i));
+        }
+
+        // remove from contactsData
+        for(int i = 0; i < unselected_contacts.getContactsName().size(); i++) {
+            contactsData.getContactsName().remove(unselected_contacts.getContactsName().get(i));
+            contactsData.getPhoneNumbers().remove(unselected_contacts.getPhoneNumbers().get(i));
+        }
     }
 
-    public void addContactNumber(String contactNumber) {
-        mContactsNumbers.add(contactNumber);
-    }
 
 }

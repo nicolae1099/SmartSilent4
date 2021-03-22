@@ -60,11 +60,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".MakeProfile" />
-        <activity android:name=".ProfileName" />
-        <activity android:name=".Contacts.MakeContacts" />
-        <activity android:name=".Contacts.SelectedContacts" />
-        <activity android:name=".MyProfiles" />
         <activity android:name=".Contacts.DisplayContacts" />
         <activity android:name=".TimeZone.MakeTimeZone" />
     </application>

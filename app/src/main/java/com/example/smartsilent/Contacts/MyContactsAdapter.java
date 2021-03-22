@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartsilent.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.MyHolder> {
 
@@ -25,6 +26,7 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
     public MyContactsAdapter(Context c, ArrayList<ContactModel> models) {
         this.c = c;
         this.models = models;
+
     }
 
     @NonNull
@@ -115,9 +117,6 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
             });
 
         }
-
-
-
 
         void bind(int position) {
             // use the sparse boolean array to check
