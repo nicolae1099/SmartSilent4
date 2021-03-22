@@ -95,7 +95,7 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
 
         // DACA UNDEVA PUI UN BUTON DE SAVE, SI APASA PE EL
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("contacts", data);
+        returnIntent.putExtra("time_zone", data);
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }

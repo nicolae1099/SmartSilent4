@@ -5,11 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 
-import com.example.smartsilent.Contacts.ContactsCursorWrapper;
-import com.example.smartsilent.Contacts.ContactsDatabase;
-import com.example.smartsilent.TimeZone.TimeZoneCursorWrapper;
-import com.example.smartsilent.TimeZone.TimeZoneDatabase;
-
 import java.util.ArrayList;
 
 public class TimeZoneDatabaseQuery {

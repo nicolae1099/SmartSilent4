@@ -30,10 +30,12 @@ public class DisplayContacts extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private MyContactsAdapter myAdapter;
     private ArrayList<ContactModel> models = new ArrayList<>();
+
     private ContactsData contacts;
     private ContactsData selected_contacts;
     private ContactsData unselected_contacts;
     HashMap<String, Boolean> inDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

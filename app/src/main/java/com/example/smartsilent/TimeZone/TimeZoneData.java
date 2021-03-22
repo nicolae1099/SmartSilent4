@@ -18,16 +18,6 @@ public class TimeZoneData implements Parcelable {
     public TimeZoneData() {
         data = new ArrayList<>();
 
-        for (int i = 0; i < NUM_DAYS; i++) {
-
-           // data.add(new boolean[NUM_HOURS]);
-
-           // boolean[] hours = data.get(i);
-           // for (int j = 0; j < NUM_HOURS; j++) {
-             //   hours[j] = false;
-          //  }
-        }
-
         days = new ArrayList<>();
         days.add("Sunday");
         days.add("Tuesday");

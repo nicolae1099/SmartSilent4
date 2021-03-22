@@ -45,6 +45,7 @@ public class Profile implements Parcelable {
     private Profile(Context context) {
         this.context = context;
 
+
         timeZoneData = new TimeZoneData();
         contactsData = new ContactsData();
 
