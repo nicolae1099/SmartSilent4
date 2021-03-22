@@ -89,7 +89,7 @@ public class Profile implements Parcelable {
                 }
             }
 
-            timeZoneData.getData().add(day_hours);
+            timeZoneData.getData().set(i, day_hours);
         }
 
         mTimeZoneDatabase.close();
@@ -168,7 +168,7 @@ public class Profile implements Parcelable {
 
             for(int j = 0; j < TimeZoneData.NUM_HOURS; j++) {
                 if(hours.get(i)[j]) {
-                    if(hours_per_day.get(i).length() != 0) {
+                    if(sb.length() != 0) {
                         sb.append(",");
                     }
                     sb.append(j);
@@ -179,7 +179,7 @@ public class Profile implements Parcelable {
         }
 
         // add in database
-        Log.e("TAG", " " + hours_per_day.size());
+        //Log.e("TAG", " " + hours_per_day.size());
         for(int i = 0; i < hours_per_day.size(); i++) {
             //Log.e("TAG", " " + days.size());
             ContentValues values = TimeZoneDatabaseQuery.getContentValues(days.get(i), hours_per_day.get(i));

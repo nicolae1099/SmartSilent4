@@ -124,7 +124,7 @@ public class CallReceiver extends BroadcastReceiver {
         if(query.getTimeZone(day) != null) {
             String[] hours = query.getTimeZone(day).second.split(",");
             for (int i = 0; i < hours.length; i++) {
-                if(Integer.parseInt(hours[i]) == currentHourIn24Format) {
+                if(!hours[i].equals("") && Integer.parseInt(hours[i]) == currentHourIn24Format) {
                     database.close();
                     return true;
                 }

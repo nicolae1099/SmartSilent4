@@ -101,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, DisplayContacts.class);
                 intent.putExtra("contacts", mProfile.getContactsData());
                 startActivityForResult(intent, MAKE_CONTACTS);
-
-
             }
         });
 
@@ -173,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
 
                     TimeZoneData in = data.getParcelableExtra("time_zone");
+                    Log.e("TAG", " " + in.getData().size());
                     mProfile.getTimeZone().setData(in.getData());
 
                     mProfile.updateTimeZoneDatabase();

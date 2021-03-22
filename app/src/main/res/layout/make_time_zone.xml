@@ -19,6 +19,7 @@
         app:layout_constraintVertical_bias="0.054" />
 
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="378dp"
         android:layout_height="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +79,7 @@
                     android:id="@+id/button_day_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sat"/>
+                    android:text="Sat" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -221,5 +222,16 @@
             android:text="12:00" />
 
     </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONFIRM"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.904" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
