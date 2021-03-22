@@ -1,16 +1,14 @@
 package com.example.smartsilent.TimeZone;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartsilent.MakeProfile;
 import com.example.smartsilent.R;
 import com.google.android.material.button.MaterialButton;
 
@@ -21,19 +19,7 @@ import java.util.List;
 public class MakeTimeZone extends AppCompatActivity implements View.OnClickListener {
 
     // asta vom returna in activitatea precedenta
-    // hours[0] = "8:00-12:00,14:00-15:00" <=> Duminica sunt selectate aceste intervale orare
-    private ArrayList<String> hours;
-
-    // selected_hours_per_day[0] <=> orele selectate duminica
-    // ex: <0, <12:00, true>>
-    //  <0, <13:00, true>>
-    //  <0, <14:00, false>>
-    //  <0, <15:00, true>>
-    //  <0, <16:00, true>>
-    //  <0, <17:00, true>>
-    // => interval 1: 12-14
-    // => interval 2: 15-17
-    private HashMap<Integer, HashMap<Integer, Boolean>> selected_hours_per_day;
+    TimeZoneData data;
 
     // butonul zilei apasat
     private int selectedDay;
@@ -69,19 +55,8 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
             buttons.add(button);
         }
 
-        hours = new ArrayList<>();
+        TimeZoneData data = this.getIntent().getParcelableExtra("time_zone");
 
-        for(int i = 0; i < WEEK_DAYS_NUM; i++) {
-            hours.add("");
-        }
-
-        selected_hours_per_day = new HashMap<>();
-        for(int i = 0; i < WEEK_DAYS_NUM; i++) {
-            selected_hours_per_day.put(i, new HashMap<Integer, Boolean>());
-            for(int j = 0; j < HOURS_IN_A_DAY; j++) {
-                selected_hours_per_day.get(i).put(j, false);
-            }
-        }
     }
 
 
@@ -89,6 +64,7 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         MaterialButton b = (MaterialButton) view;
         String buttonText = b.getText().toString();
+
         Log.e("TAG", "Value " + buttonText);
 
         /*
@@ -110,54 +86,17 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
         //if(PM) {
             valoare_ora += 12;
       //  }
+            */
 
         // facem toggle la valoarea de selectie a orei
-        Boolean is_selected = selected_hours_per_day.get(selectedDay).get(valoare_ora);
-        selected_hours_per_day.get(selectedDay).put(valoare_ora, !is_selected);
+        int hour = BUTTON_ID_INDEX.get(b.getId());
+        boolean is_selected = data.getData().get(selectedDay)[hour];
+        data.getData().get(selectedDay)[hour] = !is_selected;
 
         // DACA UNDEVA PUI UN BUTON DE SAVE, SI APASA PE EL
-        // pentru fiecare zi a saptamanii, salvam intervalele orare
-        for(int i = 0; i < WEEK_DAYS_NUM; i++) {
-            StringBuilder sb = new StringBuilder();
-
-            // orele selectate din zi
-            HashMap<Integer, Boolean> hours_in_day = selected_hours_per_day.get(i);
-
-            int min = 0, max = 0;
-
-            // adaugam intervalele orare din zi
-            for(int j = 0; j < HOURS_IN_A_DAY; j++) {
-
-                boolean selected =  hours_in_day.get(j);
-
-                if(selected) {
-                    max++;
-
-                } else {
-
-                    if(min != max) {
-
-                        if(sb.length() > 0) {
-                            sb.append(",");
-                        }
-
-                        sb.append(min);
-                        sb.append("-");
-                        sb.append(max);
-                    }
-
-                    min = j + 1;
-                    max = j + 1;
-
-                }
-            }
-            hours.add(sb.toString());
-        }
-
-       //  Acum, punem un extra
-        Intent intent = new Intent(MakeTimeZone.this, MakeProfile.class);
-        intent.putStringArrayListExtra("time_zone", hours);
-        */
-
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("contacts", data);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
     }
 }
