@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -25,8 +26,8 @@ import java.util.Map;
 public class DisplayContacts extends AppCompatActivity {
 
     private Switch selectAll;
-    private TextView confirm_selection;
-    private TextView cancel_selection;
+    private Button confirm_selection;
+    private Button cancel_selection;
     private RecyclerView mRecyclerView;
     private MyContactsAdapter myAdapter;
     private ArrayList<ContactModel> models = new ArrayList<>();
@@ -52,7 +53,7 @@ public class DisplayContacts extends AppCompatActivity {
         }
 
 
-        confirm_selection = findViewById(R.id.confirm);
+        confirm_selection = findViewById(R.id.button_confirm);
         confirm_selection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +76,7 @@ public class DisplayContacts extends AppCompatActivity {
             }
         });
 
-        cancel_selection = findViewById(R.id.cancel);
+        cancel_selection = findViewById(R.id.button_cancel);
         cancel_selection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
