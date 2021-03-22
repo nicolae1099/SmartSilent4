@@ -108,54 +108,29 @@ public class DisplayContacts extends AppCompatActivity {
     }
 
    private void getContactsList() {
-        ContentResolver resolver;
-        resolver = getContentResolver();
-        Map<Long, List<String>> phones = new HashMap<>();
-        Cursor getContactsCursor = resolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                new String[]{
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-                        ContactsContract.CommonDataKinds.Phone.NUMBER},
-                null, null, null);
+       Map<String, String> namePhoneMap = new HashMap<String, String>();
+       Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
-        if (getContactsCursor != null) {
-            while (getContactsCursor.moveToNext()) {
-                long contactId = getContactsCursor.getLong(0);
-                String phone = getContactsCursor.getString(1);
-                List<String> list;
-                if (phones.containsKey(contactId)) {
-                    list = phones.get(contactId);
-                } else {
-                    list = new ArrayList<>();
-                    phones.put(contactId, list);
-                }
+       // Loop Through All The Numbers
+       while (phones.moveToNext()) {
+           String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+           String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+           // Cleanup the phone number
+           phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
+           // Enter Into Hash Map
+           namePhoneMap.put(phoneNumber, name);
+       }
 
-                list.add(phone);
-            }
-            getContactsCursor.close();
-        }
-        getContactsCursor = resolver.query(
-                ContactsContract.Contacts.CONTENT_URI,
-                new String[]{
-                        ContactsContract.Contacts._ID,
-                        ContactsContract.Contacts.DISPLAY_NAME,
-                        ContactsContract.CommonDataKinds.Phone.PHOTO_URI},
-                null, null, null);
-        while (getContactsCursor != null &&
-                getContactsCursor.moveToNext()) {
-            long contactId = getContactsCursor.getLong(0);
-            String name = getContactsCursor.getString(1);
-            List<String> contactPhones = phones.get(contactId);
-            if (contactPhones != null) {
-                for (String phone :
-                        contactPhones) {
-                    models.add(new ContactModel(name, phone));
+       // Get The Contents of Hash Map in Log
+       for (Map.Entry<String, String> entry : namePhoneMap.entrySet()) {
+           String phoneNumber = entry.getKey();
+           String name = entry.getValue();
+           models.add(new ContactModel(name, phoneNumber));
 
-                    if(inDB.get(name) != null) {
-                        models.get(models.size() - 1).check();
-                    }
-                }
-            }
-        }
+           if(inDB.get(name) != null) {
+               models.get(models.size() - 1).check();
+           }
+       }
+       phones.close();
     }
 }
