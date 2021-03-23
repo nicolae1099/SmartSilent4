@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,17 +18,54 @@ import com.example.smartsilent.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.MyHolder> {
+public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.MyHolder> implements Filterable {
 
-    Context c;
-    ArrayList<ContactModel> models;
-    int isSelectedAll = -1;
+    private Context c;
+    private List<ContactModel> models;
+    private final ArrayList<ContactModel> contacts;
+    private int isSelectedAll = -1;
 
     public MyContactsAdapter(Context c, ArrayList<ContactModel> models) {
         this.c = c;
         this.models = models;
+        contacts = models;
+    }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    models = contacts;
+                } else {
+                    List<ContactModel> filteredList = new ArrayList<>();
+                    for (ContactModel row : contacts) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getPhone_number().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+                    models = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = models;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                models = (ArrayList<ContactModel>) filterResults.values;
+                // refresh the list with filtered data
+                notifyDataSetChanged();
+            }
+        };
     }
 
     @NonNull

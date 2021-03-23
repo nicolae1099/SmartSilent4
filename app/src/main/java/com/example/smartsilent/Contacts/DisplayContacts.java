@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -16,9 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartsilent.Profile;
 import com.example.smartsilent.R;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +39,8 @@ public class DisplayContacts extends AppCompatActivity {
     private ContactsData contacts;
     private ContactsData selected_contacts;
     private ContactsData unselected_contacts;
+    private SearchView searchView;
+    private Filter filter;
     HashMap<String, Boolean> inDB;
 
 
@@ -45,6 +48,7 @@ public class DisplayContacts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_list);
+
 
         contacts = this.getIntent().getParcelableExtra("contacts");
         selected_contacts = new ContactsData();
@@ -108,6 +112,23 @@ public class DisplayContacts extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        filter = myAdapter.getFilter();
+
+        searchView = findViewById(R.id.search_bar);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filter.filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter.filter(newText);
+                return false;
+            }
+        });
+
     }
 
    private void getContactsList() {
