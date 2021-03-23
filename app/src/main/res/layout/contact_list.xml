@@ -45,10 +45,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <SearchView
             android:layout_width="match_parent"
-            android:layout_height="470dp" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="470dp" />
+        </SearchView>
     </FrameLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -74,4 +79,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.971" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

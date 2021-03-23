@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
@@ -19,6 +20,8 @@ import com.example.smartsilent.Profile;
 import com.example.smartsilent.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +111,8 @@ public class DisplayContacts extends AppCompatActivity {
     }
 
    private void getContactsList() {
-       Map<String, String> namePhoneMap = new HashMap<String, String>();
+        List<Pair<String, String>> namePhoneMap = new ArrayList<>();
+       //Map<String, String> namePhoneMap = new HashMap<String, String>();
        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
        // Loop Through All The Numbers
@@ -118,13 +122,21 @@ public class DisplayContacts extends AppCompatActivity {
            // Cleanup the phone number
            phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
            // Enter Into Hash Map
-           namePhoneMap.put(phoneNumber, name);
+           namePhoneMap.add(Pair.create(phoneNumber, name));
+           //namePhoneMap.put(phoneNumber, name);
        }
 
+       Collections.sort(namePhoneMap, new Comparator<Pair<String, String>>() {
+           @Override
+           public int compare(final Pair<String, String> o1, final Pair<String, String> o2) {
+               return o1.second.compareTo(o2.second);
+           }
+       });
+
        // Get The Contents of Hash Map in Log
-       for (Map.Entry<String, String> entry : namePhoneMap.entrySet()) {
-           String phoneNumber = entry.getKey();
-           String name = entry.getValue();
+       for (Pair<String, String> entry : namePhoneMap) {
+           String phoneNumber = entry.first;
+           String name = entry.second;
            models.add(new ContactModel(name, phoneNumber));
 
            if(inDB.get(name) != null) {
