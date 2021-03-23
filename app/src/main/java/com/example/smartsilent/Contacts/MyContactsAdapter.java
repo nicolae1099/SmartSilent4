@@ -79,7 +79,7 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflate the row
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
         return new MyHolder(view);
     }
 
