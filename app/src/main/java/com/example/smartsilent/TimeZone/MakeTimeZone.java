@@ -34,7 +34,6 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
     private List<MaterialButton> buttons_days;
     private MaterialButton selectAM;
     private MaterialButton selectPM;
-    private MaterialButton confirmButton;
 
     private List<MaterialButton> buttons_hours;
 
@@ -109,17 +108,6 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
         selectAM.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_time_zone_selected));
         buttons_days.get(0).setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_time_zone_selected));
 
-        confirmButton = findViewById(R.id.button_confirm);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("time_zone", data);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-        });
-
         data = this.getIntent().getParcelableExtra("time_zone");
 
         restoreButtonsValues();
@@ -191,11 +179,9 @@ public class MakeTimeZone extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
         Intent returnIntent = new Intent();
         returnIntent.putExtra("time_zone", data);
         setResult(Activity.RESULT_OK,returnIntent);
-        finish();
+        super.onBackPressed();
     }
 }

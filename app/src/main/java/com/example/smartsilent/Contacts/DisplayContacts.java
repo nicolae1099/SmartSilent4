@@ -1,11 +1,16 @@
 package com.example.smartsilent.Contacts;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Filter;
@@ -13,6 +18,7 @@ import android.widget.SearchView;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +32,6 @@ import java.util.List;
 public class DisplayContacts extends AppCompatActivity {
 
     private Switch selectAll;
-    private Button confirm_selection;
-    private Button cancel_selection;
     private RecyclerView mRecyclerView;
     private MyContactsAdapter myAdapter;
     private ArrayList<ContactModel> full_contact_list = new ArrayList<>();
@@ -35,7 +39,6 @@ public class DisplayContacts extends AppCompatActivity {
     private ContactsData contacts;
     private ContactsData selected_contacts;
     private ContactsData unselected_contacts;
-    private SearchView searchView;
     private Filter filter;
     HashMap<String, Boolean> inDB;
 
@@ -45,7 +48,6 @@ public class DisplayContacts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_list);
 
-
         contacts = this.getIntent().getParcelableExtra("contacts");
         selected_contacts = new ContactsData();
         unselected_contacts = new ContactsData();
@@ -54,39 +56,6 @@ public class DisplayContacts extends AppCompatActivity {
         for(int i = 0; i < contacts.getContactsName().size(); i++) {
             inDB.put(contacts.getContactsName().get(i), true);
         }
-
-        confirm_selection = findViewById(R.id.button_confirm);
-        confirm_selection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                for(int i = 0; i < full_contact_list.size(); i++) {
-                    if((full_contact_list.get(i).getCheck() == 1 && inDB.get(full_contact_list.get(i).getName()) == null)) {
-                        selected_contacts.getContactsName().add(full_contact_list.get(i).getName());
-                        selected_contacts.getPhoneNumbers().add(full_contact_list.get(i).getPhone_number());
-                    } else if (full_contact_list.get(i).getCheck() == 0 && inDB.get(full_contact_list.get(i).getName()) != null) {
-                        unselected_contacts.getContactsName().add(full_contact_list.get(i).getName());
-                        unselected_contacts.getPhoneNumbers().add(full_contact_list.get(i).getPhone_number());
-                    }
-                }
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("selected_contacts", selected_contacts);
-                returnIntent.putExtra("unselected_contacts", unselected_contacts);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-        });
-
-        cancel_selection = findViewById(R.id.button_cancel);
-        cancel_selection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
-            }
-        });
 
         selectAll = findViewById(R.id.select_all);
         selectAll.setOnClickListener(new View.OnClickListener() {
@@ -109,21 +78,6 @@ public class DisplayContacts extends AppCompatActivity {
             ex.printStackTrace();
         }
         filter = myAdapter.getFilter();
-
-        searchView = findViewById(R.id.search_bar);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                filter.filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filter.filter(newText);
-                return false;
-            }
-        });
 
     }
 
@@ -161,5 +115,52 @@ public class DisplayContacts extends AppCompatActivity {
            }
        }
        phones.close();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search_bar).getActionView();
+
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+       // searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filter.filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter.filter(newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        for(int i = 0; i < full_contact_list.size(); i++) {
+            if((full_contact_list.get(i).getCheck() == 1 && inDB.get(full_contact_list.get(i).getName()) == null)) {
+                selected_contacts.getContactsName().add(full_contact_list.get(i).getName());
+                selected_contacts.getPhoneNumbers().add(full_contact_list.get(i).getPhone_number());
+            } else if (full_contact_list.get(i).getCheck() == 0 && inDB.get(full_contact_list.get(i).getName()) != null) {
+                unselected_contacts.getContactsName().add(full_contact_list.get(i).getName());
+                unselected_contacts.getPhoneNumbers().add(full_contact_list.get(i).getPhone_number());
+            }
+        }
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("selected_contacts", selected_contacts);
+        returnIntent.putExtra("unselected_contacts", unselected_contacts);
+        setResult(Activity.RESULT_OK, returnIntent);
+        super.onBackPressed();
     }
 }
