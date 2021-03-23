@@ -1,19 +1,16 @@
 package com.example.smartsilent.Contacts;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.SearchView;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +22,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DisplayContacts extends AppCompatActivity {
 
@@ -34,7 +30,7 @@ public class DisplayContacts extends AppCompatActivity {
     private Button cancel_selection;
     private RecyclerView mRecyclerView;
     private MyContactsAdapter myAdapter;
-    private ArrayList<ContactModel> models = new ArrayList<>();
+    private ArrayList<ContactModel> full_contact_list = new ArrayList<>();
 
     private ContactsData contacts;
     private ContactsData selected_contacts;
@@ -64,13 +60,13 @@ public class DisplayContacts extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                for(int i = 0; i < models.size(); i++) {
-                    if((models.get(i).getCheck() == 1 && inDB.get(models.get(i).getName()) == null)) {
-                        selected_contacts.getContactsName().add(models.get(i).getName());
-                        selected_contacts.getPhoneNumbers().add(models.get(i).getPhone_number());
-                    } else if (models.get(i).getCheck() == 0 && inDB.get(models.get(i).getName()) != null) {
-                        unselected_contacts.getContactsName().add(models.get(i).getName());
-                        unselected_contacts.getPhoneNumbers().add(models.get(i).getPhone_number());
+                for(int i = 0; i < full_contact_list.size(); i++) {
+                    if((full_contact_list.get(i).getCheck() == 1 && inDB.get(full_contact_list.get(i).getName()) == null)) {
+                        selected_contacts.getContactsName().add(full_contact_list.get(i).getName());
+                        selected_contacts.getPhoneNumbers().add(full_contact_list.get(i).getPhone_number());
+                    } else if (full_contact_list.get(i).getCheck() == 0 && inDB.get(full_contact_list.get(i).getName()) != null) {
+                        unselected_contacts.getContactsName().add(full_contact_list.get(i).getName());
+                        unselected_contacts.getPhoneNumbers().add(full_contact_list.get(i).getPhone_number());
                     }
                 }
 
@@ -106,7 +102,7 @@ public class DisplayContacts extends AppCompatActivity {
             mRecyclerView = findViewById(R.id.recyclerView);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            myAdapter = new MyContactsAdapter(DisplayContacts.this, models);
+            myAdapter = new MyContactsAdapter(DisplayContacts.this, full_contact_list);
             mRecyclerView.setAdapter(myAdapter);
 
         } catch (Exception ex) {
@@ -158,10 +154,10 @@ public class DisplayContacts extends AppCompatActivity {
        for (Pair<String, String> entry : namePhoneMap) {
            String phoneNumber = entry.first;
            String name = entry.second;
-           models.add(new ContactModel(name, phoneNumber));
+           full_contact_list.add(new ContactModel(name, phoneNumber));
 
            if(inDB.get(name) != null) {
-               models.get(models.size() - 1).check();
+               full_contact_list.get(full_contact_list.size() - 1).check();
            }
        }
        phones.close();

@@ -25,12 +25,19 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
     private Context c;
     private List<ContactModel> models;
     private final ArrayList<ContactModel> contacts;
+    private HashMap<String, Integer> index_in_contacts;
     private int isSelectedAll = -1;
 
-    public MyContactsAdapter(Context c, ArrayList<ContactModel> models) {
+    public MyContactsAdapter(Context c, ArrayList<ContactModel> contacts) {
         this.c = c;
-        this.models = models;
-        contacts = models;
+        this.models = contacts;
+        this.contacts = contacts;
+        
+        index_in_contacts = new HashMap<>();
+
+        for(int i = 0; i < models.size(); i++) {
+            index_in_contacts.put(models.get(i).getName(), i);
+        }
     }
 
     @Override
@@ -96,6 +103,7 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
 
             for (int i = 0; i < models.size(); i++) {
                 models.get(i).check();
+                contacts.get(index_in_contacts.get(models.get(i).getName())).check();
             }
 
         } else {
@@ -104,8 +112,10 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
             for (int i = 0; i < models.size(); i++) {
                 if(isSelectedAll == 0) {
                     models.get(i).uncheck();
+                    contacts.get(index_in_contacts.get(models.get(i).getName())).uncheck();
                 } else {
                     models.get(i).check();
+                    contacts.get(index_in_contacts.get(models.get(i).getName())).check();
                 }
             }
         }
@@ -133,11 +143,13 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
                         Log.e("Checked", "Checkbox number " + adapterPosition + "is checked.");
                         ((CheckBox) v).setChecked(true);
                         models.get(adapterPosition).check();
+                        contacts.get(index_in_contacts.get(models.get(adapterPosition).getName())).check();
 
                     } else {
                         Log.e("Checked", "Checkbox number " + adapterPosition + "is unchecked.");
                         ((CheckBox) v).setChecked(false);
                         models.get(adapterPosition).uncheck();
+                        contacts.get(index_in_contacts.get(models.get(adapterPosition).getName())).uncheck();
 
                     }
                 }
@@ -150,9 +162,11 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
                 Log.e("Checked", "Checkbox number " + position + "is unchecked.");
                 models.get(position).uncheck();
                 checkBox.setChecked(false);
+                contacts.get(index_in_contacts.get(models.get(position).getName())).uncheck();
             } else {
                 Log.e("Checked", "Checkbox number " + position + "is checked.");
                 models.get(position).check();
+                contacts.get(index_in_contacts.get(models.get(position).getName())).check();
                 checkBox.setChecked(true);
             }
         }
