@@ -97,6 +97,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.316"
+
         app:singleLine="true">
 
         <com.google.android.material.button.MaterialButton
@@ -117,37 +118,40 @@
         android:id="@+id/chip_group_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.501"
+        android:weightSum="4"
         app:singleLine="true">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_hour_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:weight="1"
             android:text="01:00" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_hour_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:weight="1"
             android:text="02:00" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_hour_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:weight="1"
             android:text="03:00" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_hour_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:weight="1"
             android:text="04:00" />
 
 
@@ -157,8 +161,6 @@
         android:id="@+id/chip_group_4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -195,8 +197,6 @@
         android:id="@+id/chip_group_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
