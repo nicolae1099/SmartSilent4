@@ -82,6 +82,7 @@ public class DisplayContacts extends AppCompatActivity {
     }
 
    private void getContactsList() {
+        HashMap<String, String> contactMap = new HashMap<>();
         List<Pair<String, String>> namePhoneMap = new ArrayList<>();
        //Map<String, String> namePhoneMap = new HashMap<String, String>();
        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
@@ -92,8 +93,13 @@ public class DisplayContacts extends AppCompatActivity {
            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
            // Cleanup the phone number
            phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
+
+           if(contactMap.get(name) != null) {
+                continue;
+           }
            // Enter Into Hash Map
            namePhoneMap.add(Pair.create(phoneNumber, name));
+           contactMap.put(name,phoneNumber);
            //namePhoneMap.put(phoneNumber, name);
        }
 
