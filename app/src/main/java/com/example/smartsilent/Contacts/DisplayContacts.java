@@ -28,6 +28,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class DisplayContacts extends AppCompatActivity {
 
@@ -82,10 +84,14 @@ public class DisplayContacts extends AppCompatActivity {
     }
 
    private void getContactsList() {
-        HashMap<String, String> contactMap = new HashMap<>();
-        List<Pair<String, String>> namePhoneMap = new ArrayList<>();
-       //Map<String, String> namePhoneMap = new HashMap<String, String>();
-       Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        Set<Pair<String, String>> namePhoneMap = new TreeSet<>(new Comparator<Pair<String, String>>() {
+            @Override
+            public int compare(Pair<String, String> p1, Pair<String, String> p2) {
+                return p1.second.compareTo(p2.second);
+            }
+        });
+
+        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
        // Loop Through All The Numbers
        while (phones.moveToNext()) {
@@ -94,21 +100,10 @@ public class DisplayContacts extends AppCompatActivity {
            // Cleanup the phone number
            phoneNumber = phoneNumber.replaceAll("[()\\s-]+", "");
 
-           if(contactMap.get(name) != null) {
-                continue;
-           }
            // Enter Into Hash Map
            namePhoneMap.add(Pair.create(phoneNumber, name));
-           contactMap.put(name,phoneNumber);
-           //namePhoneMap.put(phoneNumber, name);
        }
-
-       Collections.sort(namePhoneMap, new Comparator<Pair<String, String>>() {
-           @Override
-           public int compare(final Pair<String, String> o1, final Pair<String, String> o2) {
-               return o1.second.compareTo(o2.second);
-           }
-       });
+       phones.close();
 
        // Get The Contents of Hash Map in Log
        for (Pair<String, String> entry : namePhoneMap) {
@@ -120,7 +115,6 @@ public class DisplayContacts extends AppCompatActivity {
                full_contact_list.get(full_contact_list.size() - 1).check();
            }
        }
-       phones.close();
     }
 
     @Override
@@ -128,11 +122,7 @@ public class DisplayContacts extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search_bar).getActionView();
-
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-       // searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -167,6 +157,7 @@ public class DisplayContacts extends AppCompatActivity {
         returnIntent.putExtra("selected_contacts", selected_contacts);
         returnIntent.putExtra("unselected_contacts", unselected_contacts);
         setResult(Activity.RESULT_OK, returnIntent);
+
         super.onBackPressed();
     }
 }

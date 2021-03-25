@@ -46,7 +46,6 @@ public class Profile implements Parcelable {
     private Profile(Context context) {
         this.context = context;
 
-
         timeZoneData = new TimeZoneData();
         contactsData = new ContactsData();
 
@@ -69,6 +68,7 @@ public class Profile implements Parcelable {
 
         mContactsDatabase.close();
     }
+
     private void read_timezone() {
         // create database
         mTimeZoneDatabase = new TimeZoneDatabaseHelper(context, "profile_name").getWritableDatabase();
@@ -132,8 +132,6 @@ public class Profile implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
-
         parcel.writeParcelable(timeZoneData, 0);
         parcel.writeParcelable(contactsData, 0);
         //parcel.writeParcelable(locationsData, 0);
@@ -157,7 +155,7 @@ public class Profile implements Parcelable {
         // create database
         mTimeZoneDatabase = new TimeZoneDatabaseHelper(context, "profile_name").getWritableDatabase();
 
-        ArrayList<String> days = timeZoneData.getDays();
+        List<String> days = timeZoneData.getDays();
         ArrayList<boolean[]> hours = timeZoneData.getData();
 
         ArrayList<String> hours_per_day = new ArrayList<>();
@@ -224,6 +222,4 @@ public class Profile implements Parcelable {
             contactsData.getPhoneNumbers().remove(unselected_contacts.getPhoneNumbers().get(i));
         }
     }
-
-
 }

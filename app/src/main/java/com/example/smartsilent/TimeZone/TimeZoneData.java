@@ -4,13 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TimeZoneData implements Parcelable {
 
-
-
     ArrayList<boolean[]> data;
-    private ArrayList<String> days;
+    private List<String> days;
 
     public static final int NUM_DAYS = 7;
     public static final int NUM_HOURS = 24;
@@ -21,17 +21,9 @@ public class TimeZoneData implements Parcelable {
         for (int i = 0; i < NUM_DAYS; i++) {
             data.add(new boolean[NUM_HOURS]);
         }
-        days = new ArrayList<>();
-        days.add("Sunday");
-        days.add("Monday");
-        days.add("Tuesday");
-        days.add("Wednesday");
-        days.add("Thursday");
-        days.add("Friday");
-        days.add("Saturday");
-
-
+        days = new ArrayList<>(Arrays.asList("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"));
     }
+
     public TimeZoneData(Parcel in) {
         data = new ArrayList<>();
 
@@ -39,14 +31,7 @@ public class TimeZoneData implements Parcelable {
             data.add(new boolean[NUM_HOURS]);
         }
 
-        days = new ArrayList<>();
-        days.add("Sunday");
-        days.add("Tuesday");
-        days.add("Wednesday");
-        days.add("Thursday");
-        days.add("Friday");
-        days.add("Saturday");
-        days.add("Monday");
+        days = new ArrayList<>(Arrays.asList("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"));
 
 
         for(int i = 0; i < NUM_DAYS; i++) {
@@ -55,7 +40,7 @@ public class TimeZoneData implements Parcelable {
         in.readStringList(days);
     }
 
-    public ArrayList<String> getDays() {
+    public List<String> getDays() {
         return days;
     }
 

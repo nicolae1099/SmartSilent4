@@ -61,10 +61,8 @@ public class CallReceiver extends BroadcastReceiver {
 
         String incoming_number= bundle.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
         contactNumber = incoming_number;
-        String msg = "";
 
         String contact_name = getContactDisplayNameByNumber(incoming_number,context);
-
 
         // unsilence phone
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);

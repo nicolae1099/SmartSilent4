@@ -4,12 +4,6 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.util.Pair;
 
-/**Nota: Nu sterge. Este model pentru baza de date pentru intervalele orare.
- * Spre ex:
- * @dayString: Monday / Tuesday / ... / Sunday
- * @hourString: string cu successiuni de intervale orare: 8:30-10:00,12:30-14:00,16:00-20:00
- * */
-
 public class TimeZoneCursorWrapper extends CursorWrapper {
     public TimeZoneCursorWrapper(Cursor cursor) {
         super(cursor);

@@ -136,17 +136,13 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Log.e("Checked", "de ce eu");
                     int adapterPosition = getAdapterPosition();
                     if (models.get(adapterPosition).getCheck() != 1) {
-                        Log.e("Checked", "Checkbox number " + adapterPosition + "is checked.");
                         ((CheckBox) v).setChecked(true);
                         models.get(adapterPosition).check();
                         contacts.get(index_in_contacts.get(models.get(adapterPosition).getName())).check();
 
                     } else {
-                        Log.e("Checked", "Checkbox number " + adapterPosition + "is unchecked.");
                         ((CheckBox) v).setChecked(false);
                         models.get(adapterPosition).uncheck();
                         contacts.get(index_in_contacts.get(models.get(adapterPosition).getName())).uncheck();
@@ -159,12 +155,10 @@ public class MyContactsAdapter extends RecyclerView.Adapter<MyContactsAdapter.My
         void bind(int position) {
             // use the sparse boolean array to check
             if (models.get(position).getCheck() != 1) {
-                Log.e("Checked", "Checkbox number " + position + "is unchecked.");
                 models.get(position).uncheck();
                 checkBox.setChecked(false);
                 contacts.get(index_in_contacts.get(models.get(position).getName())).uncheck();
             } else {
-                Log.e("Checked", "Checkbox number " + position + "is checked.");
                 models.get(position).check();
                 contacts.get(index_in_contacts.get(models.get(position).getName())).check();
                 checkBox.setChecked(true);
