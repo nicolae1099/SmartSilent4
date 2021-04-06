@@ -23,6 +23,7 @@ import com.example.smartsilent.Contacts.DisplayContacts;
 import com.example.smartsilent.Location.MapsActivity;
 import com.example.smartsilent.TimeZone.MakeTimeZone;
 import com.example.smartsilent.TimeZone.TimeZoneData;
+import com.google.android.material.card.MaterialCardView;
 
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -35,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
-    private Button locationButton;
-    private Button contactsButton;
-    private Button timezoneButton;
+    private MaterialCardView locationCardView;
+    private MaterialCardView wifiCardView;
+    private MaterialCardView contactsCardView;
+    private MaterialCardView timezoneCardView;
 
     private Profile mProfile;
     final private int MAKE_CONTACTS = 1;
@@ -64,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
         mProfile = Profile.getInstance(this.getApplicationContext());
 
-        locationButton = findViewById(R.id.add_location_button);
-        locationButton.setOnClickListener(new View.OnClickListener() {
+        locationCardView = findViewById(R.id.add_location_cardView);
+        locationCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MapsActivity.class);
@@ -74,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        contactsButton = findViewById(R.id.add_contact_button);
-        contactsButton.setOnClickListener(new View.OnClickListener() {
+        contactsCardView = findViewById(R.id.add_contact_cardView);
+        contactsCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, DisplayContacts.class);
@@ -84,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        timezoneButton = findViewById(R.id.add_time_zone_button);
-        timezoneButton.setOnClickListener(new View.OnClickListener() {
+        timezoneCardView = findViewById(R.id.add_time_zone_cardView);
+        timezoneCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MakeTimeZone.class);
