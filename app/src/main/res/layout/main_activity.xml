@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cut_card_background">
+
+    <TextView
+        android:id="@+id/silence_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Silence everything"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:layout_margin="8dp"/>
+
+        <androidx.gridlayout.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/silence_textview"
+            android:layout_marginTop="20dp"
+            android:layout_margin="20dp"
+            app:columnCount="2"
+            app:rowCount="2">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/add_location_cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:layout_row="0"
+                app:layout_column="0"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_location"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Locations"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorBlack"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/add_wifi_cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:layout_row="0"
+                app:layout_column="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_wifi"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wi-Fi"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorBlack"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/add_contact_cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:layout_row="1"
+                app:layout_column="0"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_call"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Contacts"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorBlack"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/add_time_zone_cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_gravity="fill"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:layout_row="1"
+                app:layout_column="1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calendar"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hours"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorBlack"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.gridlayout.widget.GridLayout>
+
+</RelativeLayout>
