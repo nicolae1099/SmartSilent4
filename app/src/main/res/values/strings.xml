@@ -4,4 +4,6 @@
     <string name="my_profiles">My profiles</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
+    <string name="search_location_hint">Search location</string>
+    <string name="nearby_url_api">https://maps.googleapis.com/maps/api/place/nearbysearch/json</string>
 </resources>

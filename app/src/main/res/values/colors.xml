@@ -8,5 +8,6 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
     <color name="colorPurple">#6200EE</color>
+    <color name="colorGreenLight">#CEF3A3</color>
 
 </resources>
